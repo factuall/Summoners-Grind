@@ -1,5 +1,5 @@
 //canvas setup
-const canvas = document.getElementById('canvas1');
+const canvas = document.getElementById('GameScreen');
 const ctx = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
@@ -144,10 +144,10 @@ var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
 
 objects.push(cursor);
-objects.push(new Enemy());
+//objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
-objects.push(eeenemy);
+//objects.push(eeenemy);
 
 /////////////////////////////////////////
 //vector normalizing by Max Maximilian
