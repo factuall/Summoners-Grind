@@ -87,22 +87,31 @@ class Enemy extends Live{
                     let closestDist = 9999999;
                     objects.forEach(element => {
                         if(element.type == "Player" || element.type == "Ally"){
-                            let distX = this.x - element.x;
-                            let distY = this.y - element.y;
-                            let lengthXY = Math.sqrt(distX * distY);
-                            if(lengthXY < closestDist){
-                                closestDist = lengthXY;
+                            let distance = GetDistanceBetweenObjects(this, element);
+                            if(distance < closestDist){
+                                closestDist = distance;
                                 closest = element.index;
                             }
                         }
                     });
                     this.target = closest;
-                }else if(!CollisionDetection(this,objects[this.target])){
+                }
 
-                    let distX = this.x - objects[this.target].x;
-                    let distY = this.y - objects[this.target].y;
-                    let destination = new Vector(distX, distY);
-                    destination.normalize();
+                let collided = false;
+                objects.forEach(element => {
+                    if(CollisionDetection(this,element) && element!=this && objects[1] != element){
+                        if(element.type == "Player") collided = true;
+                        if(element.type == "Enemy" && !collided){
+                            let destination = GetFacingVector(this, element);
+                            this.x += destination.x * 1;
+                            this.y += destination.y * 1;
+                            collided = true;
+                        }
+                    }
+
+                });
+                if(!CollisionDetection(this,objects[this.target]) && !collided){
+                    let destination = GetFacingVector(this, objects[this.target]);
                     this.x -= destination.x * 1;
                     this.y -= destination.y * 1;
                 
@@ -136,12 +145,11 @@ function CollisionDetection(colA, colB){
 objects.push(new Player());
 var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
-
 objects.push(cursor);
-//objects.push(new Enemy());
+objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
-//objects.push(eeenemy);
+objects.push(eeenemy);
 
 
 
