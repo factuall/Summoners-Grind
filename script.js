@@ -60,7 +60,7 @@ class Player extends Live{
         this.underAttack = true;
     }
     updatePlayer(){
-        this.inPosition = (collisionDetection(this, objects[1]));
+        this.inPosition = (CollisionDetection(this, objects[1]));
         if(!this.inPosition){
             let distX = this.x - objects[1].x;
             let distY = this.y - objects[1].y;
@@ -100,7 +100,7 @@ class Enemy extends Live{
                         }
                     });
                     this.target = closest;
-                }else if(!collisionDetection(this,objects[this.target])){
+                }else if(!CollisionDetection(this,objects[this.target])){
 
                     let distX = this.x - objects[this.target].x;
                     let distY = this.y - objects[this.target].y;
@@ -124,7 +124,7 @@ function render(){
     });
 }
 
-function collisionDetection(colA, colB){
+function CollisionDetection(colA, colB){
     if (colA.x < colB.x + colB.w &&
         colA.x + colB.w > colB.x &&
         colA.y < colB.y + colB.h &&
@@ -134,9 +134,24 @@ function collisionDetection(colA, colB){
     return false;    
 }
 
+function GetFacingVector(objectFacing, target){
+    let distX = objectFacing.x - this.target.x;
+    let distY = objectFacing.y - this.target.y;
+    let destination = new Vector(distX, distY);
+    destination.normalize();
+    return(destination);
+}
 
+function GetXYDistanceBetweenObjects(origin, destination){
+    let distX = objectFacing.x - this.target.x;
+    let distY = objectFacing.y - this.target.y;
+    return({distX, distY});
+}
 
-
+function GetDistanceBetweenObjects(origin, destination){
+    let distanceXY = GetXYDistanceBetweenObjects(origin, destination);
+    return(Math.sqrt(distanceXY[0] * distanceXY[1]));
+}
 
 
 objects.push(new Player());
