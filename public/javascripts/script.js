@@ -62,10 +62,7 @@ class Player extends Live{
     updatePlayer(){
         this.inPosition = (CollisionDetection(this, objects[1]));
         if(!this.inPosition){
-            let distX = this.x - objects[1].x;
-            let distY = this.y - objects[1].y;
-            let destination = new Vector(distX, distY);
-            destination.normalize();
+            let destination = GetFacingVector(this, objects[1]);
             this.x -= destination.x * 4;
             this.y -= destination.y * 4;
         }
@@ -134,24 +131,6 @@ function CollisionDetection(colA, colB){
     return false;    
 }
 
-function GetFacingVector(objectFacing, target){
-    let distX = objectFacing.x - this.target.x;
-    let distY = objectFacing.y - this.target.y;
-    let destination = new Vector(distX, distY);
-    destination.normalize();
-    return(destination);
-}
-
-function GetXYDistanceBetweenObjects(origin, destination){
-    let distX = objectFacing.x - this.target.x;
-    let distY = objectFacing.y - this.target.y;
-    return({distX, distY});
-}
-
-function GetDistanceBetweenObjects(origin, destination){
-    let distanceXY = GetXYDistanceBetweenObjects(origin, destination);
-    return(Math.sqrt(distanceXY[0] * distanceXY[1]));
-}
 
 
 objects.push(new Player());
@@ -164,18 +143,7 @@ var eeenemy = new Enemy();
 eeenemy.x = 600;
 //objects.push(eeenemy);
 
-/////////////////////////////////////////
-//vector normalizing by Max Maximilian
-/////////////////////////////////////////
-var Vector = function(x,y) {
-    this.x = x;
-    this.y = y;
-    }     
-Vector.prototype.normalize = function() {
-var length = Math.sqrt(this.x*this.x+this.y*this.y); //calculating length
-this.x = this.x/length; //assigning new value to x (dividing x by length of the vector)
-this.y= this.y/length; //assigning new value to y
-}
+
 
 function update(){
     objects[0].updatePlayer();
