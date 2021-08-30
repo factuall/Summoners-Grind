@@ -1,3 +1,4 @@
+
 //canvas setup
 const canvas = document.getElementById('GameScreen');
 const ctx = canvas.getContext('2d');
@@ -15,6 +16,7 @@ const mouse = {
 }
 
 canvas.addEventListener('mousedown', function(event){
+    canvasPosition = canvas.getBoundingClientRect();
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
     
@@ -76,50 +78,51 @@ class Enemy extends Live{
         this.y = 400;
         this.c = "#ff3333";
         this.type = "Enemy";
-        this.enemyType = "Mage"
+        this.enemyType = "Range"
         this.target = "None"
     }
     updateEnemy(){
-        switch(this.enemyType){
-            case "Mage":
-                if(this.target == "None"){
-                    let closest;
-                    let closestDist = 9999999;
-                    objects.forEach(element => {
-                        if(element.type == "Player" || element.type == "Ally"){
-                            let distance = GetDistanceBetweenObjects(this, element);
-                            if(distance < closestDist){
-                                closestDist = distance;
-                                closest = element.index;
-                            }
-                        }
-                    });
-                    this.target = closest;
-                }
-
-                let collided = false;
-                objects.forEach(element => {
-                    if(CollisionDetection(this,element) && element!=this && objects[1] != element){
-                        if(element.type == "Player") collided = true;
-                        if(element.type == "Enemy" && !collided){
-                            let destination = GetFacingVector(this, element);
-                            this.x += destination.x * 1;
-                            this.y += destination.y * 1;
-                            collided = true;
-                        }
+        if(this.target == "None"){
+            let closest;
+            let closestDist = 9999999;
+            objects.forEach(element => {
+                if(element.type == "Player" || element.type == "Ally"){
+                    let distance = GetDistanceBetweenObjects(this, element);
+                    if(distance < closestDist){
+                        closestDist = distance;
+                        closest = element.index;
                     }
-
-                });
-                if(!CollisionDetection(this,objects[this.target]) && !collided){
-                    let destination = GetFacingVector(this, objects[this.target]);
-                    this.x -= destination.x * 1;
-                    this.y -= destination.y * 1;
-                
                 }
-                break;
-            default:
-                break;
+            });
+
+            this.target = closest;
         }
+
+        let collided = false;
+        objects.forEach(element => {
+            if(CollisionDetection(this,element) && element!=this && objects[1] != element){
+                if(element.type == "Player") collided = true;
+                if(element.type == "Enemy" && !collided){
+                    let destination = GetFacingVector(this, element);
+                    this.x += destination.x * 1;
+                    this.y += destination.y * 1;
+                    collided = true;
+                }
+            }
+
+        });
+        if(!CollisionDetection(this,objects[this.target])){
+            if(GetDistanceBetweenObjects(this,objects[this.target]) < 100){
+
+            }else{
+                let destination = GetFacingVector(this, objects[this.target]);
+                this.x -= destination.x * 1;
+                this.y -= destination.y * 1;
+            }
+
+        
+        }
+        
     }
 };
 
