@@ -1,3 +1,13 @@
+function CollisionDetection(colA, colB){
+    if (colA.x < colB.x + colB.w &&
+        colA.x + colB.w > colB.x &&
+        colA.y < colB.y + colB.h &&
+        colA.y + colA.h > colB.y) {
+            return true;
+    }
+    return false;    
+}
+
 /////////////////////////////////////////
 //vector normalizing by Max Maximilian
 /////////////////////////////////////////

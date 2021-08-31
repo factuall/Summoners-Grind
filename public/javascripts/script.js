@@ -1,3 +1,8 @@
+const Entityname = {
+    Active: 'Active',
+    Static: 'Static',
+    Ghost: 'Ghost'
+  };
 
 //canvas setup
 const canvas = document.getElementById('GameScreen');
@@ -44,7 +49,7 @@ var intervalId = window.setInterval(function(){
 class Live{
     constructor(){
         this.index = objects.length;
-        this.type = "Object";
+        this.name = "Object";
         this.x = 0; 
         this.y = 0;
         this.w = 50;
@@ -56,7 +61,7 @@ class Live{
 class Player extends Live{
     constructor(){
         super();
-        this.type = "Player";
+        this.name = "Player";
         this.c = "#88ff88";
         this.inPosition = true;
         this.underAttack = true;
@@ -77,16 +82,16 @@ class Enemy extends Live{
         this.x = 400;
         this.y = 400;
         this.c = "#ff3333";
-        this.type = "Enemy";
-        this.enemyType = "Range"
+        this.name = "Enemy";
+        this.enemyname = "Range"
         this.target = "None"
     }
     updateEnemy(){
         if(this.target == "None"){
             let closest;
-            let closestDist = 9999999;
+            let closestDist = Number.MAX_SAFE_INTEGER;
             objects.forEach(element => {
-                if(element.type == "Player" || element.type == "Ally"){
+                if(element.name == "Player" || element.name == "Ally"){
                     let distance = GetDistanceBetweenObjects(this, element);
                     if(distance < closestDist){
                         closestDist = distance;
@@ -101,8 +106,8 @@ class Enemy extends Live{
         let collided = false;
         objects.forEach(element => {
             if(CollisionDetection(this,element) && element!=this && objects[1] != element){
-                if(element.type == "Player") collided = true;
-                if(element.type == "Enemy" && !collided){
+                if(element.name == "Player") collided = true;
+                if(element.name == "Enemy" && !collided){
                     let destination = GetFacingVector(this, element);
                     this.x += destination.x * 1;
                     this.y += destination.y * 1;
@@ -133,18 +138,6 @@ function render(){
     });
 }
 
-function CollisionDetection(colA, colB){
-    if (colA.x < colB.x + colB.w &&
-        colA.x + colB.w > colB.x &&
-        colA.y < colB.y + colB.h &&
-        colA.y + colA.h > colB.y) {
-            return true;
-    }
-    return false;    
-}
-
-
-
 objects.push(new Player());
 var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
@@ -154,12 +147,10 @@ var eeenemy = new Enemy();
 eeenemy.x = 600;
 objects.push(eeenemy);
 
-
-
 function update(){
     objects[0].updatePlayer();
     objects.forEach(element => {
-        if(element.type == "Enemy"){
+        if(element.name == "Enemy"){
             element.updateEnemy();
         }
     });
