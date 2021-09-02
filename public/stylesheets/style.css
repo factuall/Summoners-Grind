@@ -47,7 +47,7 @@ body{
     margin-top: 3%;
     background-color: brown;
     height: 75%;
-    width: 60%;
+    width: 50%;
     padding-left: 1%;
     padding-right: 1%;
 }
@@ -59,10 +59,31 @@ body{
 #PlayerStats{
     display: flex;
     flex-wrap: wrap;
-    background-color: blue;
+    background-color: lightcyan;
     height: 40%;
     margin-top:2%;
     padding: 0.5%;
+}
+#PlayerSkills{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 00.5%;
+}
+.Skill{
+    background-color: black;
+    color: white;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+    width: 40px;    
+}
+.SkillSpacer{
+    background-color: black;
+    color: white;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 4px;    
 }
 .Container{
     display: flex;
@@ -76,7 +97,7 @@ body{
     background-color: red;
     transition: width 1s;
     width: 99%;
-    height: 82%;
+    height: 80%;
     margin:auto;
     margin-left: 0.5%;
     
