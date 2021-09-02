@@ -37,5 +37,5 @@ function GetXYDistanceBetweenObjects(origin, destination){
 
 function GetDistanceBetweenObjects(origin, destination){
     let distance = GetXYDistanceBetweenObjects(origin, destination);
-    return(Math.sqrt(distance.distX * distance.distY));
+    return(Math.sqrt(Math.abs(distance.distX) * Math.abs(distance.distY)));
 }
