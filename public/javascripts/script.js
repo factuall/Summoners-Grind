@@ -12,6 +12,11 @@ canvas.height = 600;
 ctx.font = '30px Arial'
 var objects = [];
 
+//gui
+const HPBar = document.getElementById('HealthBar');
+const MPBar = document.getElementById('ManaBar');
+MPBar.style.backgroundColor = "rgb(75,75,255)";
+
 //mouse
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
@@ -65,7 +70,19 @@ class Player extends Live{
         this.c = "#88ff88";
         this.inPosition = true;
         this.underAttack = true;
+        //stats
+        this.health = 1000;
+        this.maxHealth = 1200;
+        this.mana = 200;
+        this.maxMana = 200;
     }
+
+    damagePlayer(damage){
+        if(this.health >= damage)
+        this.health -= damage;
+
+    }
+
     updatePlayer(){
         this.inPosition = (CollisionDetection(this, objects[1]));
         if(!this.inPosition){
@@ -73,6 +90,14 @@ class Player extends Live{
             this.x -= destination.x * 4;
             this.y -= destination.y * 4;
         }
+        this.updateGUI();
+    }
+
+    updateGUI(){
+        HPBar.innerHTML = this.health;
+        HPBar.style.width = 100 * (this.health / this.maxHealth) + "%";
+        MPBar.innerHTML = this.mana;
+        MPBar.style.width = 100 * (this.mana / this.maxMana) + "%";
     }
 };
 
@@ -126,6 +151,8 @@ class Enemy extends Live{
             }
 
         
+        }else{
+            objects[0].damagePlayer(2);
         }
         
     }

@@ -103,14 +103,15 @@ body{
 }
 .StatBar{
     background-color: red;
-    transition: width 1s;
+    transition: width 200ms;
     width: 99%;
     height: 80%;
     margin:auto;
     margin-left: 0.5%;
-    text-align: center
+    text-align: center;
+    color: white;
     
 }
-.StatBar:hover{
+/*.StatBar:hover{
     width: 20%;
-}
+}*/
