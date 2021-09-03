@@ -70,13 +70,21 @@ body{
     padding: 00.5%;
 }
 .Skill{
-    background-color: black;
+    background-color: gray;
+    outline: 4px solid black;
+    transition: outline 200ms, outline-offset 200ms;
+    outline-offset: -4px;
     color: white;
     margin-left: 0.5%;
     margin-right: 0.5%;
     margin-top: 0.5%;
     margin-bottom: 0.5%;
     width: 40px;    
+    padding: 5px;
+}
+.Skill:hover{
+    outline: 2px solid black;
+    outline-offset: -2px;
 }
 .SkillSpacer{
     background-color: black;
@@ -100,6 +108,7 @@ body{
     height: 80%;
     margin:auto;
     margin-left: 0.5%;
+    text-align: center
     
 }
 .StatBar:hover{
