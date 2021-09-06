@@ -107,6 +107,9 @@ class Enemy extends Live{
         this.x = 400;
         this.y = 400;
         this.c = "#ff3333";
+        this.attackDamage = 20;
+        this.attackSpeed = 20;
+        this.lastAttack = 0;
         this.name = "Enemy";
         this.enemyname = "Range"
         this.target = "None"
@@ -152,9 +155,14 @@ class Enemy extends Live{
 
         
         }else{
-            objects[0].damagePlayer(2);
+            if(this.lastAttack>(1000/this.attackSpeed)){
+                objects[0].damagePlayer(this.attackDamage);
+                this.lastAttack = 0;
+            }
         }
         
+        this.lastAttack++;
+
     }
 };
 
@@ -165,7 +173,9 @@ function render(){
     });
 }
 
-objects.push(new Player());
+var player = new Player();
+player.health = player.maxHealth;
+objects.push(player);
 var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
 objects.push(cursor);
