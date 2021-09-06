@@ -72,7 +72,7 @@ body{
 .Skill{
     background-color: gray;
     outline: 4px solid black;
-    transition: outline 200ms, outline-offset 200ms;
+    transition: outline 200ms, outline-offset 200ms, background-color 100ms;
     outline-offset: -4px;
     color: white;
     margin-left: 0.5%;

@@ -17,12 +17,26 @@ const HPBar = document.getElementById('HealthBar');
 const MPBar = document.getElementById('ManaBar');
 MPBar.style.backgroundColor = "rgb(75,75,255)";
 
+const SkillsGUI = document.getElementsByClassName('Skill');
+
 //mouse
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
     x: canvas.width/2,
     y: canvas.height/2,
     click: false
+}
+
+//keyboard
+document.addEventListener('keypress', keyPressed);
+function keyPressed(e) {
+  console.log(e.code);
+  if(e.code == "KeyQ" ||
+    e.code == "KeyW" ||
+    e.code == "KeyE" ||
+    e.code == "KeyR"){
+        player.inputKey(e);
+    }
 }
 
 canvas.addEventListener('mousedown', function(event){
@@ -75,6 +89,9 @@ class Player extends Live{
         this.maxHealth = 1200;
         this.mana = 200;
         this.maxMana = 200;
+
+        this.CooldownQ = 100;
+        this.CooldownClockQ = 0;
     }
 
     damagePlayer(damage){
@@ -90,14 +107,31 @@ class Player extends Live{
             this.x -= destination.x * 4;
             this.y -= destination.y * 4;
         }
+        this.CooldownClockQ++;
         this.updateGUI();
     }
 
     updateGUI(){
+        //health and mana bars
         HPBar.innerHTML = this.health + " / " + this.maxHealth;
         HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "%";
         MPBar.innerHTML = this.mana + " / " + this.maxMana;
         MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
+        
+        //skills
+        SkillsGUI[0].style.backgroundColor = (this.CooldownClockQ > this.CooldownQ) ? "gray" : "rgb(55,55,55)";
+    }
+
+    inputKey(e){
+        switch(e.code){
+            case "KeyQ":
+                if(this.CooldownClockQ > this.CooldownQ){
+                    this.CooldownClockQ = 0;
+                }
+                break;
+            default:
+                break;
+        }
     }
 };
 
