@@ -94,10 +94,10 @@ class Player extends Live{
     }
 
     updateGUI(){
-        HPBar.innerHTML = this.health;
-        HPBar.style.width = 100 * (this.health / this.maxHealth) + "%";
-        MPBar.innerHTML = this.mana;
-        MPBar.style.width = 100 * (this.mana / this.maxMana) + "%";
+        HPBar.innerHTML = this.health + " / " + this.maxHealth;
+        HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "%";
+        MPBar.innerHTML = this.mana + " / " + this.maxMana;
+        MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
     }
 };
 
@@ -107,7 +107,7 @@ class Enemy extends Live{
         this.x = 400;
         this.y = 400;
         this.c = "#ff3333";
-        this.attackDamage = 20;
+        this.attackDamage = 200;
         this.attackSpeed = 20;
         this.lastAttack = 0;
         this.name = "Enemy";
@@ -156,7 +156,7 @@ class Enemy extends Live{
         
         }else{
             if(this.lastAttack>(1000/this.attackSpeed)){
-                objects[0].damagePlayer(this.attackDamage);
+                player.damagePlayer(this.attackDamage);
                 this.lastAttack = 0;
             }
         }
@@ -185,7 +185,7 @@ eeenemy.x = 600;
 objects.push(eeenemy);
 
 function update(){
-    objects[0].updatePlayer();
+    player.updatePlayer();
     objects.forEach(element => {
         if(element.name == "Enemy"){
             element.updateEnemy();

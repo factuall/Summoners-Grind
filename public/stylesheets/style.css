@@ -110,7 +110,8 @@ body{
     margin-left: 0.5%;
     text-align: center;
     color: white;
-    
+    overflow: visible;
+    white-space: nowrap;
 }
 /*.StatBar:hover{
     width: 20%;
