@@ -93,14 +93,12 @@ class Player extends Live{
         //skills
         //i wish nobody will see that
         //whis is temporary i promise
-        this.CooldownQ = 1000;
-        this.CooldownClockQ = 0;
-        this.CooldownW = 200;
-        this.CooldownClockW = 0;
-        this.CooldownE = 500;
-        this.CooldownClockE = 0;
-        this.CooldownR = 5000;
-        this.CooldownClockR = 0;
+
+        this.skills = [];
+        this.skills.push(new Skill("KeyQ", "Q", 100));
+        this.skills.push(new Skill("KeyW", "W", 200));
+        this.skills.push(new Skill("KeyE", "E", 300));
+        this.skills.push(new Skill("KeyR", "R", 400));
     }
 
     damagePlayer(damage){
@@ -116,10 +114,9 @@ class Player extends Live{
             this.x -= destination.x * 4;
             this.y -= destination.y * 4;
         }
-        this.CooldownClockQ++;
-        this.CooldownClockW++;
-        this.CooldownClockE++;
-        this.CooldownClockR++;
+        this.skills.forEach(playerSkill => {
+            playerSkill.clock++;
+        });
         this.updateGUI();
     }
 
@@ -132,23 +129,24 @@ class Player extends Live{
         
         //skills
         //this is not that temporary... i guess...
-        SkillsGUI[0].style.backgroundColor = (this.CooldownClockQ > this.CooldownQ) ? "gray" : "rgb(55,55,55)";
-        SkillsGUI[1].style.backgroundColor = (this.CooldownClockW > this.CooldownW) ? "gray" : "rgb(55,55,55)";
-        SkillsGUI[2].style.backgroundColor = (this.CooldownClockE > this.CooldownE) ? "gray" : "rgb(55,55,55)";
-        SkillsGUI[3].style.backgroundColor = (this.CooldownClockR > this.CooldownR) ? "gray" : "rgb(55,55,55)";
-
-        SkillsGUI[0].innerHTML = "Q" + ((this.CooldownClockQ > this.CooldownQ) ? "" : HTMLBEAK + (this.CooldownQ - this.CooldownClockQ));
-        SkillsGUI[1].innerHTML = "W" + ((this.CooldownClockW > this.CooldownW) ? "" : HTMLBEAK + (this.CooldownW - this.CooldownClockW));
-        SkillsGUI[2].innerHTML = "E" + ((this.CooldownClockE > this.CooldownE) ? "" : HTMLBEAK + (this.CooldownE - this.CooldownClockE));
-        SkillsGUI[3].innerHTML = "R" + ((this.CooldownClockR > this.CooldownR) ? "" : HTMLBEAK + (this.CooldownR - this.CooldownClockR));
+        this.skills.forEach(function(playerSkill, i){
+            SkillsGUI[i].style.backgroundColor = (playerSkill.clock > playerSkill.cooldown) ? "gray" : "rgb(55,55,55)";
+            SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock > playerSkill.cooldown) ? "" : HTMLBEAK + (playerSkill.cooldown - playerSkill.clock));
+        });
     }
 
+    
+
     inputKey(e){ //this is temporary too please dont kill me
+        this.skills.forEach(playerSkill => {
+            if(e.code == playerSkill.keycode && playerSkill.clock > playerSkill.cooldown){
+                playerSkill.clock = 0;
+            }
+        });
+        
         switch(e.code){
             case "KeyQ":
-                if(this.CooldownClockQ > this.CooldownQ){
-                    this.CooldownClockQ = 0;
-                }
+
                 break;
             case "KeyW":
                 if(this.CooldownClockW > this.CooldownW){
@@ -245,10 +243,6 @@ function render(){
 
 var player = new Player();
 player.health = player.maxHealth;
-player.CooldownClockQ = player.CooldownQ;
-player.CooldownClockW = player.CooldownW;
-player.CooldownClockE = player.CooldownE;
-player.CooldownClockR = player.CooldownR;
 objects.push(player);
 var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
