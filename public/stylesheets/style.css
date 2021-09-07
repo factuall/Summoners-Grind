@@ -81,6 +81,7 @@ body{
     margin-bottom: 0.5%;
     width: 40px;    
     padding: 5px;
+    font-size: small;
 }
 .Skill:hover{
     outline: 2px solid black;

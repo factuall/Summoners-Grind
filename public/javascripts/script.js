@@ -13,6 +13,7 @@ ctx.font = '30px Arial'
 var objects = [];
 
 //gui
+const HTMLBEAK = "<br/>"
 const HPBar = document.getElementById('HealthBar');
 const MPBar = document.getElementById('ManaBar');
 MPBar.style.backgroundColor = "rgb(75,75,255)";
@@ -92,13 +93,13 @@ class Player extends Live{
         //skills
         //i wish nobody will see that
         //whis is temporary i promise
-        this.CooldownQ = 100;
+        this.CooldownQ = 1000;
         this.CooldownClockQ = 0;
-        this.CooldownW = 100;
+        this.CooldownW = 200;
         this.CooldownClockW = 0;
-        this.CooldownE = 100;
+        this.CooldownE = 500;
         this.CooldownClockE = 0;
-        this.CooldownR = 100;
+        this.CooldownR = 5000;
         this.CooldownClockR = 0;
     }
 
@@ -130,11 +131,16 @@ class Player extends Live{
         MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
         
         //skills
-        //this is not that temporary... i guess first half of the lines
+        //this is not that temporary... i guess...
         SkillsGUI[0].style.backgroundColor = (this.CooldownClockQ > this.CooldownQ) ? "gray" : "rgb(55,55,55)";
         SkillsGUI[1].style.backgroundColor = (this.CooldownClockW > this.CooldownW) ? "gray" : "rgb(55,55,55)";
         SkillsGUI[2].style.backgroundColor = (this.CooldownClockE > this.CooldownE) ? "gray" : "rgb(55,55,55)";
         SkillsGUI[3].style.backgroundColor = (this.CooldownClockR > this.CooldownR) ? "gray" : "rgb(55,55,55)";
+
+        SkillsGUI[0].innerHTML = "Q" + ((this.CooldownClockQ > this.CooldownQ) ? "" : HTMLBEAK + (this.CooldownQ - this.CooldownClockQ));
+        SkillsGUI[1].innerHTML = "W" + ((this.CooldownClockW > this.CooldownW) ? "" : HTMLBEAK + (this.CooldownW - this.CooldownClockW));
+        SkillsGUI[2].innerHTML = "E" + ((this.CooldownClockE > this.CooldownE) ? "" : HTMLBEAK + (this.CooldownE - this.CooldownClockE));
+        SkillsGUI[3].innerHTML = "R" + ((this.CooldownClockR > this.CooldownR) ? "" : HTMLBEAK + (this.CooldownR - this.CooldownClockR));
     }
 
     inputKey(e){ //this is temporary too please dont kill me
