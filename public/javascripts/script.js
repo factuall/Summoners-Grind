@@ -89,9 +89,17 @@ class Player extends Live{
         this.maxHealth = 1200;
         this.mana = 200;
         this.maxMana = 200;
-
+        //skills
+        //i wish nobody will see that
+        //whis is temporary i promise
         this.CooldownQ = 100;
         this.CooldownClockQ = 0;
+        this.CooldownW = 100;
+        this.CooldownClockW = 0;
+        this.CooldownE = 100;
+        this.CooldownClockE = 0;
+        this.CooldownR = 100;
+        this.CooldownClockR = 0;
     }
 
     damagePlayer(damage){
@@ -108,6 +116,9 @@ class Player extends Live{
             this.y -= destination.y * 4;
         }
         this.CooldownClockQ++;
+        this.CooldownClockW++;
+        this.CooldownClockE++;
+        this.CooldownClockR++;
         this.updateGUI();
     }
 
@@ -119,14 +130,33 @@ class Player extends Live{
         MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
         
         //skills
+        //this is not that temporary... i guess first half of the lines
         SkillsGUI[0].style.backgroundColor = (this.CooldownClockQ > this.CooldownQ) ? "gray" : "rgb(55,55,55)";
+        SkillsGUI[1].style.backgroundColor = (this.CooldownClockW > this.CooldownW) ? "gray" : "rgb(55,55,55)";
+        SkillsGUI[2].style.backgroundColor = (this.CooldownClockE > this.CooldownE) ? "gray" : "rgb(55,55,55)";
+        SkillsGUI[3].style.backgroundColor = (this.CooldownClockR > this.CooldownR) ? "gray" : "rgb(55,55,55)";
     }
 
-    inputKey(e){
+    inputKey(e){ //this is temporary too please dont kill me
         switch(e.code){
             case "KeyQ":
                 if(this.CooldownClockQ > this.CooldownQ){
                     this.CooldownClockQ = 0;
+                }
+                break;
+            case "KeyW":
+                if(this.CooldownClockW > this.CooldownW){
+                    this.CooldownClockW = 0;
+                }
+                break;
+            case "KeyE":
+                if(this.CooldownClockE > this.CooldownE){
+                    this.CooldownClockE = 0;
+                }
+                break;
+            case "KeyR":
+                if(this.CooldownClockR > this.CooldownR){
+                    this.CooldownClockR = 0;
                 }
                 break;
             default:
@@ -209,6 +239,10 @@ function render(){
 
 var player = new Player();
 player.health = player.maxHealth;
+player.CooldownClockQ = player.CooldownQ;
+player.CooldownClockW = player.CooldownW;
+player.CooldownClockE = player.CooldownE;
+player.CooldownClockR = player.CooldownR;
 objects.push(player);
 var cursor = new Live();
 cursor.c = "rgba(225,225,225,0.1)";
