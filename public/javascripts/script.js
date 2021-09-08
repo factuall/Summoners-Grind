@@ -40,6 +40,18 @@ function keyPressed(e) {
     }
 }
 
+//update and render setup
+const perfectFrameTime = 1000 / 60;
+let deltaTime = 0;
+let lastTimestamp = 0;
+function start() {
+    requestAnimationFrame(update);
+}
+var intervalId = window.setInterval(function(){
+    render();
+}, 3);
+//clearInterval(intervalId); 
+
 canvas.addEventListener('mousedown', function(event){
     canvasPosition = canvas.getBoundingClientRect();
     mouse.x = event.x - canvasPosition.left;
@@ -54,17 +66,6 @@ function drawRect(x, y, w, h, c){
     ctx.fillRect(x, y, w , h);
 }
 
-let lastRender = Date.now();
-var intervalId = window.setInterval(function(){
-    //frame cap
-    if(Date.now() > lastRender+15){
-        update();
-        render();
-        
-        lastRender = Date.now();
-    }
-}, 3);
-//clearInterval(intervalId); 
 
 class Live{
     constructor(){
@@ -95,7 +96,7 @@ class Player extends Live{
         //whis is temporary i promise
 
         this.skills = [];
-        this.skills.push(new Skill("KeyQ", "Q", 100));
+        this.skills.push(new Skill("KeyQ", "Q", 60));
         this.skills.push(new Skill("KeyW", "W", 200));
         this.skills.push(new Skill("KeyE", "E", 300));
         this.skills.push(new Skill("KeyR", "R", 400));
@@ -115,9 +116,9 @@ class Player extends Live{
             this.y -= destination.y * 4;
         }
         this.skills.forEach(playerSkill => {
-            playerSkill.clock++;
+            playerSkill.clock += deltaTime;
         });
-        this.updateGUI();
+
     }
 
     updateGUI(){
@@ -130,8 +131,11 @@ class Player extends Live{
         //skills
         //this is not that temporary... i guess...
         this.skills.forEach(function(playerSkill, i){
-            SkillsGUI[i].style.backgroundColor = (playerSkill.clock > playerSkill.cooldown) ? "gray" : "rgb(55,55,55)";
-            SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock > playerSkill.cooldown) ? "" : HTMLBEAK + (playerSkill.cooldown - playerSkill.clock));
+            SkillsGUI[i].style.backgroundColor = (playerSkill.clock >= playerSkill.cooldown) ? "gray" : "rgb(55,55,55)";
+            let timeLeft = (playerSkill.cooldown - playerSkill.clock) / 60;
+            
+            //timeLeft = (Math.round(timeLeft * 10) / 10).toFixed(1);
+            SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock >= playerSkill.cooldown) ? "" : HTMLBEAK + timeLeft.toFixed(1) + "s");
         });
     }
 
@@ -239,6 +243,7 @@ function render(){
     objects.forEach(object => {
         drawRect(object.x, object.y, object.w, object.h, object.c);
     });
+    player.updateGUI();
 }
 
 var player = new Player();
@@ -252,7 +257,11 @@ var eeenemy = new Enemy();
 eeenemy.x = 600;
 objects.push(eeenemy);
 
-function update(){
+function update(timestamp){
+    requestAnimationFrame(update);
+    deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
+    
+    lastTimestamp = timestamp;
     player.updatePlayer();
     objects.forEach(element => {
         if(element.name == "Enemy"){
@@ -261,3 +270,5 @@ function update(){
     });
 
 }
+
+start();
