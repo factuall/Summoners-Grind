@@ -7,6 +7,29 @@ class Life{
         this.w = 50;
         this.h = 50;
         this.c = "#000000";
+        this.ox = this.x - (this.w/2);
+        thix.oy = this.y - (this.h/2);
+    }
+
+    move(x,y){
+        this.x += x;
+        this.y += y;
+        this.ox = this.x - (this.w/2);
+        this.oy = this.y - (this.h/2);
+    }
+
+    setPosition(x,y){
+        this.x = x;
+        this.y = y;
+        this.ox = this.x - (this.w/2);
+        this.oy = this.y - (this.h/2);
+    }
+
+    setCentralPosition(x,y){
+        this.ox = x;
+        this.oy = y;
+        this.x = this.ox + (this.w/2);
+        thix.y = this.oy + (this.h/2);
     }
 }
 
@@ -119,7 +142,7 @@ class Enemy extends Life{
         this.x = 400;
         this.y = 400;
         this.c = "#ff3333";
-        this.attackDamage = 5;
+        this.attackDamage = 200;
         this.attackSpeed = 8;
         this.lastAttack = 0;
         this.name = "Enemy";
