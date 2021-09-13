@@ -1,6 +1,6 @@
 function CollisionDetection(colA, colB){
     if (colA.x < colB.x + colB.w &&
-        colA.x + colB.w > colB.x &&
+        colA.x + colA.w > colB.x &&
         colA.y < colB.y + colB.h &&
         colA.y + colA.h > colB.y) {
             return true;
@@ -30,8 +30,8 @@ function GetFacingVector(origin, destination){
 }
 
 function GetFacingVectorCC(origin, destination){
-    let distX = origin.ox - destination.ox;
-    let distY = origin.oy - destination.oy;
+    let distX = origin.x - destination.ox;
+    let distY = origin.y - destination.oy;
     let facingVector = new Vector(distX, distY);
     facingVector.normalize();
     return(facingVector);
@@ -51,10 +51,16 @@ function GetXYDistanceBetweenObjectsCC(origin, destination){
 
 function GetDistanceBetweenObjects(origin, destination){
     let distance = GetXYDistanceBetweenObjects(origin, destination);
-    return(Math.sqrt(Math.abs(distance.distX) * Math.abs(distance.distY)));
+    return(Math.sqrt(
+        (Math.abs(distance.distX) * Math.abs(distance.distX)) + 
+        (Math.abs(distance.distY) * Math.abs(distance.distY))
+        ));
 }
 
 function GetDistanceBetweenObjectsCC(origin, destination){
     let distance = GetXYDistanceBetweenObjectsCC(origin, destination);
-    return(Math.sqrt(Math.abs(distance.distX) * Math.abs(distance.distY)));
+    return(Math.sqrt(
+        (Math.abs(distance.distX) * Math.abs(distance.distX)) + 
+        (Math.abs(distance.distY) * Math.abs(distance.distY))
+        ));
 }
