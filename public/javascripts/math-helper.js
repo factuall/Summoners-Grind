@@ -29,13 +29,32 @@ function GetFacingVector(origin, destination){
     return(facingVector);
 }
 
+function GetFacingVectorCC(origin, destination){
+    let distX = origin.ox - destination.ox;
+    let distY = origin.oy - destination.oy;
+    let facingVector = new Vector(distX, distY);
+    facingVector.normalize();
+    return(facingVector);
+}
+
 function GetXYDistanceBetweenObjects(origin, destination){
     let distX = origin.x - destination.x;
     let distY = origin.y - destination.y;
     return({distX, distY});
 }
 
+function GetXYDistanceBetweenObjectsCC(origin, destination){
+    let distX = origin.ox - destination.ox;
+    let distY = origin.oy - destination.oy;
+    return({distX, distY});
+}
+
 function GetDistanceBetweenObjects(origin, destination){
     let distance = GetXYDistanceBetweenObjects(origin, destination);
+    return(Math.sqrt(Math.abs(distance.distX) * Math.abs(distance.distY)));
+}
+
+function GetDistanceBetweenObjectsCC(origin, destination){
+    let distance = GetXYDistanceBetweenObjectsCC(origin, destination);
     return(Math.sqrt(Math.abs(distance.distX) * Math.abs(distance.distY)));
 }
