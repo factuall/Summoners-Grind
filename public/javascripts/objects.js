@@ -7,30 +7,35 @@ class Life{
         this.w = 50;
         this.h = 50;
         this.c = "#000000";
-        this.ox = this.x - (this.w/2);
-        thix.oy = this.y - (this.h/2);
+        this.ox = this.x + (this.w/2);
+        this.oy = this.y + (this.h/2);
+    }
+
+    updateCetralPosition(){
+        this.ox = this.x + (this.w/2);
+        this.oy = this.y + (this.h/2);
     }
 
     move(x,y){
         this.x += x;
         this.y += y;
-        this.ox = this.x - (this.w/2);
-        this.oy = this.y - (this.h/2);
+        this.updateCetralPosition();
     }
 
     setPosition(x,y){
         this.x = x;
         this.y = y;
-        this.ox = this.x - (this.w/2);
-        this.oy = this.y - (this.h/2);
+        this.updateCetralPosition();
     }
 
     setCentralPosition(x,y){
         this.ox = x;
         this.oy = y;
-        this.x = this.ox + (this.w/2);
-        thix.y = this.oy + (this.h/2);
+        this.x = this.ox - (this.w/2);
+        this.y = this.oy - (this.h/2);
     }
+
+
 }
 
 class Trash extends Life{
@@ -75,8 +80,7 @@ class Player extends Life{
         this.inPosition = (CollisionDetection(this, objects[1]));
         if(!this.inPosition){
             let destination = GetFacingVector(this, objects[1]);
-            this.x -= destination.x * 4;
-            this.y -= destination.y * 4;
+            this.move(-destination.x*4,-destination.y*4);
         }
         this.skills.forEach(playerSkill => {
             playerSkill.clock += deltaTime;

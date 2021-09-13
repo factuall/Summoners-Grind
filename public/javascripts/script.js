@@ -52,14 +52,6 @@ var intervalId = window.setInterval(function(){
 }, 3);
 //clearInterval(intervalId); 
 
-canvas.addEventListener('mousedown', function(event){
-    canvasPosition = canvas.getBoundingClientRect();
-    mouse.x = event.x - canvasPosition.left;
-    mouse.y = event.y - canvasPosition.top;
-    
-    objects[1].x = mouse.x-25;
-    objects[1].y = mouse.y-25;
-});
 
 function drawRect(x, y, w, h, c){
     ctx.fillStyle = c;
@@ -79,8 +71,19 @@ var player = new Player();
 player.health = player.maxHealth;
 objects.push(player);
 var cursor = new Life();
-cursor.c = "rgba(225,225,225,0.1)";
+cursor.w = 10;
+cursor.h = 10;
+cursor.c = "rgba(225,225,225,0.4)";
 objects.push(cursor);
+canvas.addEventListener('mousedown', function(event){
+    canvasPosition = canvas.getBoundingClientRect();
+    mouse.x = event.x - canvasPosition.left;
+    mouse.y = event.y - canvasPosition.top;
+    
+    cursor.setCentralPosition(mouse.x, mouse.y)
+
+});
+
 objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
