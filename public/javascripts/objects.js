@@ -60,9 +60,6 @@ class Player extends Life{
         this.mana = 200;
         this.maxMana = 200;
         //skills
-        //i wish nobody will see that
-        //whis is temporary i promise
-
         this.skills = [];
         this.skills.push(new Skill("KeyQ", "Q", 60));
         this.skills.push(new Skill("KeyW", "W", 200));
@@ -126,6 +123,9 @@ class Enemy extends Life{
         this.name = "Enemy";
         this.enemyname = "Range"
         this.target = "None"
+        this.range = 200;
+        //melee or range
+        this.enemyType = range;
     }
     updateEnemy(){
         if(this.target == "None"){
@@ -157,26 +157,27 @@ class Enemy extends Life{
 
         });
         if(!CollisionDetection(this,objects[this.target])){
-            if(GetDistanceBetweenObjects(this,objects[this.target]) < 300){
+            if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.type == "range"){
                 if(this.lastAttack>(1000/this.attackSpeed)){
                     objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
                     this.lastAttack = 0;
                 }
-
             }else{
                 let destination = GetFacingVector(this, objects[this.target]);
                 this.move(-destination.x*deltaTime,-destination.y*deltaTime);
             }
-
-        
         }else{
-            if(this.lastAttack>(1000/this.attackSpeed)){
+            if(this.lastAttack>(1000/this.attackSpeed && this.type == "melee")){
                 player.damagePlayer(this.attackDamage);
                 this.lastAttack = 0;
             }
         }
         
         this.lastAttack++;
+
+    }
+
+    function tryToAttack(){
 
     }
 };
