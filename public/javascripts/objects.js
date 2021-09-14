@@ -157,27 +157,27 @@ class Enemy extends Life{
 
         });
         if(!CollisionDetection(this,objects[this.target])){
-            if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.type == "range"){
-                if(this.lastAttack>(1000/this.attackSpeed)){
-                    objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
-                    this.lastAttack = 0;
-                }
+            if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.enemyType == "range"){
+                this.tryToAttack();
             }else{
                 let destination = GetFacingVector(this, objects[this.target]);
                 this.move(-destination.x*deltaTime,-destination.y*deltaTime);
             }
-        }else{
-            if(this.lastAttack>(1000/this.attackSpeed && this.type == "melee")){
-                player.damagePlayer(this.attackDamage);
-                this.lastAttack = 0;
-            }
+        }else if(this.enemyType == "melee"){
         }
-        
         this.lastAttack++;
-
     }
 
     function tryToAttack(){
+        if(this.lastAttack > attackDamage / 1000){
+            if(this.enemyType == "melee") {
+                this.lastAttack = 0;
+                player.damagePlayer(this.attackDamage);
+            }else{
+                this.lastAttack = 0;
+                objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
+            }
+        }
 
     }
 };
