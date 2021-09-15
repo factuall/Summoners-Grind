@@ -128,7 +128,8 @@ class Enemy extends Life{
         this.target = "None"
         this.range = 200;
         //melee or range
-        this.enemyType = "range";
+        this.enemyType = "melee";
+        this.sprite = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateEnemy(){
         if(this.target == "None"){
@@ -167,7 +168,7 @@ class Enemy extends Life{
                 this.move(-destination.x*deltaTime,-destination.y*deltaTime);
             }
         }else if(this.enemyType == "melee"){
-            
+            this.tryToAttack();
         }
         this.lastAttack++;
     }

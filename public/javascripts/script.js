@@ -107,6 +107,8 @@ canvas.addEventListener('mousedown', function(event){
 objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
+eeenemy.sprite = new Sprite("/img/miecznik.png", 50, 50);
+eeenemy.enemyType = "melee";
 objects.push(eeenemy);
 
 function update(timestamp){
