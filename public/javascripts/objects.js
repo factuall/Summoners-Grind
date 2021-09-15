@@ -9,6 +9,7 @@ class Life{
         this.c = "#000000";
         this.ox = this.x + (this.w/2);
         this.oy = this.y + (this.h/2);
+        this.sprite = "none";
     }
 
     updateCetralPosition(){
@@ -164,11 +165,12 @@ class Enemy extends Life{
                 this.move(-destination.x*deltaTime,-destination.y*deltaTime);
             }
         }else if(this.enemyType == "melee"){
+            
         }
         this.lastAttack++;
     }
-
-    function tryToAttack(){
+    
+    tryToAttack(){
         if(this.lastAttack > attackDamage / 1000){
             if(this.enemyType == "melee") {
                 this.lastAttack = 0;
@@ -180,7 +182,7 @@ class Enemy extends Life{
         }
 
     }
-};
+}
 
 class Projectile extends Life{
     constructor(source, target, speed, damage){
