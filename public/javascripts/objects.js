@@ -118,7 +118,7 @@ class Enemy extends Life{
         this.x = 400;
         this.y = 400;
         this.c = "#ff3333";
-        this.attackDamage = 200;
+        this.attackDamage = 20;
         this.attackSpeed = 8;
         this.lastAttack = 0;
         this.name = "Enemy";
@@ -126,7 +126,7 @@ class Enemy extends Life{
         this.target = "None"
         this.range = 200;
         //melee or range
-        this.enemyType = range;
+        this.enemyType = "range";
     }
     updateEnemy(){
         if(this.target == "None"){
@@ -171,7 +171,7 @@ class Enemy extends Life{
     }
     
     tryToAttack(){
-        if(this.lastAttack > attackDamage / 1000){
+        if(this.lastAttack > 1000 / this.attackSpeed){
             if(this.enemyType == "melee") {
                 this.lastAttack = 0;
                 player.damagePlayer(this.attackDamage);
