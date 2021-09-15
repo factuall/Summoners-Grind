@@ -78,7 +78,11 @@ function drawRect(x, y, w, h, c){
 function render(){
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
-        drawRect(object.x, object.y, object.w, object.h, object.c);
+        if(object.sprite != "none"){
+            ctx.drawImage(object.sprite.image, object.x, object.y, object.sprite.width, object.sprite.height);
+        }else{
+            drawRect(object.x, object.y, object.w, object.h, object.c);
+        }
     });
     player.updateGUI();
 }

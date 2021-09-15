@@ -66,6 +66,8 @@ class Player extends Life{
         this.skills.push(new Skill("KeyW", "W", 200));
         this.skills.push(new Skill("KeyE", "E", 300));
         this.skills.push(new Skill("KeyR", "R", 400));
+        //sprite
+        this.sprite = new Sprite("/img/hipek.png", 50, 50);
     }
 
     damagePlayer(damage){
