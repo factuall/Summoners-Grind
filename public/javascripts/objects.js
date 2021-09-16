@@ -91,10 +91,11 @@ class Player extends Life{
     updateGUI(){
         //health and mana bars
         HPBar.innerHTML = this.health + " / " + this.maxHealth;
-        HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "%";
+        if(this.health > 0) HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "% HP";
+        else HPBar.style.width = "0px";
         MPBar.innerHTML = this.mana + " / " + this.maxMana;
-        MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
-        
+        if(this.mana > 0) MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "% MP";
+        else MPBar.style.width = "0px";
         //skills
         this.skills.forEach(function(playerSkill, i){
             SkillsGUI[i].style.backgroundColor = (playerSkill.clock >= playerSkill.cooldown) ? "gray" : "rgb(55,55,55)";
