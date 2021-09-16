@@ -1,9 +1,3 @@
-const Entityname = {
-    Active: 'Active',
-    Static: 'Static',
-    Ghost: 'Ghost'
-  };
-
 //canvas setup
 const canvas = document.getElementById('GameScreen');
 const ctx = canvas.getContext('2d');
@@ -21,6 +15,12 @@ MPBar.style.backgroundColor = "rgb(75,75,255)";
 const SkillsGUI = document.getElementsByClassName('Skill');
 
 //mouse
+//replace right context menu
+window.addEventListener('contextmenu', function (e) { 
+    // do something here... 
+    e.preventDefault(); 
+}, false);
+//left mouseclick
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
     x: canvas.width/2,
@@ -32,13 +32,8 @@ const mouse = {
 //keyboard
 document.addEventListener('keypress', keyPressed);
 function keyPressed(e) {
-  console.log(e.code);
-  if(e.code == "KeyQ" ||
-    e.code == "KeyW" ||
-    e.code == "KeyE" ||
-    e.code == "KeyR"){
-        player.inputKey(e);
-    }
+player.inputKey(e);
+
 }
 
 //update and render setup
@@ -81,12 +76,15 @@ cursor.h = 10;
 cursor.c = "rgba(225,225,225,0.4)";
 objects.push(cursor);
 canvas.addEventListener('mousedown', function(event){
-    canvasPosition = canvas.getBoundingClientRect();
-    mouse.x = event.x - canvasPosition.left;
-    mouse.y = event.y - canvasPosition.top;
-    
-    cursor.setCentralPosition(mouse.x, mouse.y)
+    if(event.button === 0){
 
+    }else{
+        canvasPosition = canvas.getBoundingClientRect();
+        mouse.x = event.x - canvasPosition.left;
+        mouse.y = event.y - canvasPosition.top;
+        
+        cursor.setCentralPosition(mouse.x, mouse.y)
+    }
 });
 
 objects.push(new Enemy());
