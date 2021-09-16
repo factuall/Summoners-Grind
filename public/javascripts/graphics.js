@@ -49,7 +49,23 @@ class Animation{
 } 
 
 class AnimationController{
-    constructor(){
-
+    constructor(animations, currentAnimation){
+        this.animations = animations; 
+        this.currentAnimation = currentAnimation;
+        this.sprite = animations[0].getCurrentSprite();
+    }
+    getCurrentAnimation(){
+        return this.animations[this.currentAnimation];
+    }
+    getCurrentSprite(){
+        return this.sprite;
+    }
+    controllerUpdate(deltaTime){
+        this.animations[this.currentAnimation].updateAnimation(deltaTime);
+        this.sprite = this.animations[this.currentAnimation].getCurrentSprite();
+    }
+    playAnimation(index){
+        this.currentAnimation = index;
+        this.animations[this.currentAnimation]
     }
 }
