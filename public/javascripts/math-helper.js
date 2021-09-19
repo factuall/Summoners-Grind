@@ -29,9 +29,17 @@ function GetFacingVector(origin, destination){
     return(facingVector);
 }
 
-function GetFacingVectorCC(origin, destination){
+function GetFacingVectorC(origin, destination){
     let distX = origin.x - destination.ox;
     let distY = origin.y - destination.oy;
+    let facingVector = new Vector(distX, distY);
+    facingVector.normalize();
+    return(facingVector);
+}
+
+function GetFacingVectorCC(origin, destination){
+    let distX = origin.ox - destination.ox;
+    let distY = origin.oy - destination.oy;
     let facingVector = new Vector(distX, distY);
     facingVector.normalize();
     return(facingVector);

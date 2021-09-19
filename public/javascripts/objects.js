@@ -204,7 +204,7 @@ class Projectile extends Life{
     }
     
     updateProjectile(){
-        let destination = GetFacingVectorCC(this, this.target);
+        let destination = GetFacingVectorC(this, this.target);
         this.move(-destination.x*deltaTime*this.speed, -destination.y*deltaTime*this.speed);
     
         if(CollisionDetection(this,this.target)){
