@@ -13,6 +13,10 @@ const MPBar = document.getElementById('ManaBar');
 MPBar.style.backgroundColor = "rgb(75,75,255)";
 
 const SkillsGUI = document.getElementsByClassName('Skill');
+SkillsGUI[0].style.backgroundImage = "url('img/skillQ.png')"
+SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
+SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
+SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
 
 //mouse
 //replace right context menu

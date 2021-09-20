@@ -98,7 +98,7 @@ class Player extends Life{
         else MPBar.style.width = "0px";
         //skills
         this.skills.forEach(function(playerSkill, i){
-            SkillsGUI[i].style.backgroundColor = (playerSkill.clock >= playerSkill.cooldown) ? "gray" : "rgb(55,55,55)";
+            SkillsGUI[i].style.filter = (playerSkill.clock >= playerSkill.cooldown) ? "brightness(100%)" : "brightness(50%)";
             let timeLeft = (playerSkill.cooldown - playerSkill.clock) / 60;
             SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock >= playerSkill.cooldown) ? "" : HTMLBEAK + timeLeft.toFixed(1) + "s");
         });

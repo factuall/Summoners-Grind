@@ -72,7 +72,7 @@ body{
 .Skill{
     background-color: gray;
     outline: 4px solid black;
-    transition: outline 200ms, outline-offset 200ms, background-color 200ms;
+    transition: outline 200ms, outline-offset 200ms, filter 200ms;
     outline-offset: -4px;
     color: white;
     margin-left: 0.5%;
@@ -82,6 +82,8 @@ body{
     width: 40px;    
     padding: 5px;
     font-size: small;
+    filter: brightness(100%);
+    background-repeat: no-repeat;
 }
 .Skill:hover{
     outline: 2px solid black;
