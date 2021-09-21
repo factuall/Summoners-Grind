@@ -91,10 +91,10 @@ class Player extends Life{
     updateGUI(){
         //health and mana bars
         HPBar.innerHTML = this.health + " / " + this.maxHealth;
-        if(this.health > 0) HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "% HP";
+        if(this.health > 0) HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "%";
         else HPBar.style.width = "0px";
         MPBar.innerHTML = this.mana + " / " + this.maxMana;
-        if(this.mana > 0) MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "% MP";
+        if(this.mana > 0) MPBar.style.width = (100 * (this.mana / this.maxMana)) - 1 + "%";
         else MPBar.style.width = "0px";
         //skills
         this.skills.forEach(function(playerSkill, i){
@@ -129,7 +129,7 @@ class Enemy extends Life{
         this.target = "None"
         this.range = 200;
         //melee or range
-        this.enemyType = "melee";
+        this.enemyType = "range";
         this.sprite = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateEnemy(){
