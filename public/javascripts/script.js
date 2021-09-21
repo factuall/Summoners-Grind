@@ -64,17 +64,13 @@ function drawImage(x, y, w, h, s){
 
 function drawObject(x, y, w, h, content){
     if(typeof content == "string") drawRect(x, y, w, h, content);
-    else drawImage(x, y, w, h, content);
+    else drawImage(x, y, w, h, content.image);
 }
 
 function render(){
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
-        if(object.sprite != "none"){
-            ctx.drawImage(object.sprite.image, object.x, object.y, object.sprite.width, object.sprite.height);
-        }else{
-            drawRect(object.x, object.y, object.w, object.h, object.c);
-        }
+        object.renderObject();
     });
     player.updateGUI();
 }

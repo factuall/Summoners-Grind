@@ -6,10 +6,9 @@ class Life{
         this.y = 0;
         this.w = 50;
         this.h = 50;
-        this.c = "#000000";
         this.ox = this.x + (this.w/2);
         this.oy = this.y + (this.h/2);
-        this.sprite = "none";
+        this.drawContent = "#000000";
     }
 
     updateCetralPosition(){
@@ -36,7 +35,9 @@ class Life{
         this.y = this.oy - (this.h/2);
     }
 
-
+    renderObject(){
+        drawObject(this.x, this.y, this.w, this.h, this.drawContent);
+    }
 }
 
 class Trash extends Life{
@@ -52,7 +53,6 @@ class Player extends Life{
     constructor(){
         super();
         this.name = "Player";
-        this.c = "#88ff88";
         this.inPosition = true;
         this.underAttack = true;
         //stats
@@ -67,7 +67,7 @@ class Player extends Life{
         this.skills.push(new Skill("KeyE", "E", 300));
         this.skills.push(new Skill("KeyR", "R", 400));
         //sprite
-        this.sprite = new Sprite("/img/hipek.png", 50, 50);
+        this.drawContent = new Sprite("/img/hipek.png", 50, 50);
     }
 
     damagePlayer(damage){
@@ -120,7 +120,6 @@ class Enemy extends Life{
         super();
         this.x = 400;
         this.y = 400;
-        this.c = "#ff3333";
         this.attackDamage = 20;
         this.attackSpeed = 8;
         this.lastAttack = 0;
@@ -130,7 +129,7 @@ class Enemy extends Life{
         this.range = 200;
         //melee or range
         this.enemyType = "range";
-        this.sprite = new Sprite("/img/lucznik.png", 50, 50);
+        this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateEnemy(){
         if(this.target == "None"){
@@ -200,7 +199,7 @@ class Projectile extends Life{
         this.x = source.ox - (this.w / 2);
         this.y = source.oy - (this.h / 2);
         this.updateCetralPosition();
-        this.c = "#ffff33";
+        this.drawContent = "#ffff33";
         this.name = "Projectile";
     }
     
