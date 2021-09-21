@@ -58,6 +58,14 @@ function drawRect(x, y, w, h, c){
     ctx.fillRect(x, y, w , h);
 }
 
+function drawImage(x, y, w, h, s){
+    ctx.drawImage(s, x, y, w, h);
+}
+
+function drawObject(x, y, w, h, content){
+    if(typeof content == "string") drawRect(x, y, w, h, content);
+    else drawImage(x, y, w, h, content);
+}
 
 function render(){
     drawRect(0,0,canvas.width,canvas.height, "#505050");
