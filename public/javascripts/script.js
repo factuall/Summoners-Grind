@@ -36,14 +36,29 @@ const mouse = {
 //keyboard
 document.addEventListener('keypress', keyPressed);
 function keyPressed(e) {
-player.inputKey(e);
-
+    switch(e.code){
+        case "KeyL":
+            cam.x += 10;
+            break;
+        case "KeyJ":
+            cam.x -= 10;
+            break;
+        case "KeyI":
+            cam.y -= 10;
+            break;
+        case "KeyK":
+            cam.y += 10;
+            break;
+        
+    }
+    player.inputKey(e);
 }
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
 let deltaTime = 0;
 let lastTimestamp = 0;
+var cam = new Camera(0, 0, canvas.width, canvas.height);
 function start() {
     requestAnimationFrame(update);
 }
@@ -63,8 +78,9 @@ function drawImage(x, y, w, h, s){
 }
 
 function drawObject(x, y, w, h, content){
-    if(typeof content == "string") drawRect(x, y, w, h, content);
-    else drawImage(x, y, w, h, content.image);
+    let objViewPos = cam.getViewPosition(x, y);
+    if(typeof content == "string") drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
+    else drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
 }
 
 function render(){

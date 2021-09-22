@@ -20,7 +20,7 @@ class Camera{
         this.width = w;
         this.height = h;
     }
-    getViewPosition(objX, objy){
+    getViewPosition(objX, objY){
         let objViewX = objX - this.x;
         let objViewY = objY - this.y;
         return {
