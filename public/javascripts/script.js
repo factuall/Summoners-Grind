@@ -79,8 +79,15 @@ function drawImage(x, y, w, h, s){
 
 function drawObject(x, y, w, h, content){
     let objViewPos = cam.getViewPosition(x, y);
-    if(typeof content == "string") drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
-    else drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
+    //Detect if object is in camera's view
+    if(objViewPos.objViewX < 0 + cam.width &&
+        objViewPos.objViewX + w > 0 &&
+        objViewPos.objViewY < 0 + cam.height &&
+        objViewPos.objViewY + h > 0){
+        //if yes, then render it to canvas
+        if(typeof content == "string") drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
+        else drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
+    }
 }
 
 function render(){
