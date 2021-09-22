@@ -13,6 +13,31 @@ class Sprite{
     }
 }
 
+class Camera{
+    constructor(x, y, w, h){
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+    }
+    getViewPosition(objX, objy){
+        let objViewX = objX - this.x;
+        let objViewY = objY - this.y;
+        return {
+            objViewX: objViewX,
+            objViewY: objViewY
+        };
+    }
+    getView(){
+        return{
+            xA: this.x,
+            yA: this.y,
+            xB: this.x + this.width,
+            yB: this.y + this.height
+        };
+    }
+}
+
 class Animation{
     constructor(frames, delay, loop){
         this.currentFrame = 0;
