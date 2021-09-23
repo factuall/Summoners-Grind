@@ -121,23 +121,16 @@ canvas.addEventListener('mousedown', function(event){
 objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
-eeenemy.sprite = new Sprite("/img/miecznik.png", 50, 50);
+eeenemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
 eeenemy.enemyType = "melee";
 objects.push(eeenemy);
 
 function update(timestamp){
     requestAnimationFrame(update);
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
-    
     lastTimestamp = timestamp;
-    player.updatePlayer();
     objects.forEach(element => {
-        if(element.name == "Enemy"){
-            element.updateEnemy();
-        }
-        if(element.name == "Projectile"){
-            element.updateProjectile();
-        }
+        element.updateObject();
     });
 
 }

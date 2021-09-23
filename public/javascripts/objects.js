@@ -38,6 +38,10 @@ class Life{
     renderObject(){
         drawObject(this.x, this.y, this.w, this.h, this.drawContent);
     }
+
+    updateObject(){
+        
+    }
 }
 
 class Trash extends Life{
@@ -68,6 +72,8 @@ class Player extends Life{
         this.skills.push(new Skill("KeyR", "R", 400));
         //sprite
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
+        //camera flag
+        this.cameraFollow = true;
     }
 
     damagePlayer(damage){
@@ -76,7 +82,7 @@ class Player extends Life{
 
     }
 
-    updatePlayer(){
+    updateObject(){
         this.inPosition = (CollisionDetection(this, cursor));
         if(!this.inPosition){
             let destination = GetFacingVectorCC(this, cursor);
@@ -85,7 +91,7 @@ class Player extends Life{
         this.skills.forEach(playerSkill => {
             playerSkill.clock += deltaTime;
         });
-
+        
     }
 
     updateGUI(){
@@ -131,7 +137,7 @@ class Enemy extends Life{
         this.enemyType = "range";
         this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
-    updateEnemy(){
+    updateObject(){
         if(this.target == "None"){
             let closest;
             let closestDist = Number.MAX_SAFE_INTEGER;
@@ -203,7 +209,7 @@ class Projectile extends Life{
         this.name = "Projectile";
     }
     
-    updateProjectile(){
+    updateObject(){
         let destination = GetFacingVectorC(this, this.target);
         this.move(-destination.x*deltaTime*this.speed, -destination.y*deltaTime*this.speed);
     
