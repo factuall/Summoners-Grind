@@ -18,21 +18,7 @@ SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
 SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
 SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
 
-//mouse
-//replace right context menu
-window.addEventListener('contextmenu', function (e) { 
-    // do something here... 
-    e.preventDefault(); 
-}, false);
-//left mouseclick
-let canvasPosition = canvas.getBoundingClientRect();
-const mouse = {
-    x: canvas.width/2,
-    y: canvas.height/2,
-    click: false
-}
-
-
+var lockcam = false;
 //keyboard
 document.addEventListener('keypress', keyPressed);
 function keyPressed(e) {
@@ -49,7 +35,9 @@ function keyPressed(e) {
         case "KeyK":
             cam.y += 10;
             break;
-        
+        case "KeyY":
+            lockcam = !lockcam;
+            break;
     }
     player.inputKey(e);
 }
@@ -66,6 +54,20 @@ var intervalId = window.setInterval(function(){
     render();
 }, 3);
 //clearInterval(intervalId); 
+
+//mouse
+//replace right context menu
+window.addEventListener('contextmenu', function (e) { 
+    // do something here... 
+    e.preventDefault(); 
+}, false);
+//left mouseclick
+let canvasPosition = canvas.getBoundingClientRect();
+const mouse = {
+    x: canvas.width/2,
+    y: canvas.height/2,
+    click: false
+}
 
 
 function drawRect(x, y, w, h, c){
@@ -96,8 +98,17 @@ function render(){
         object.renderObject();
     });
     player.updateGUI();
+    if(lockcam){
+        cam.x = player.x - (cam.width / 2) + (player.w / 2);
+        cam.y = player.y - (cam.height / 2) + (player.h / 2); 
+    }
 }
 
+var trawusia = new Life();
+trawusia.w = 800;
+trawusia.h = 600;
+trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
+objects.push(trawusia);
 var player = new Player();
 player.health = player.maxHealth;
 objects.push(player);
@@ -111,8 +122,8 @@ canvas.addEventListener('mousedown', function(event){
 
     }else{
         canvasPosition = canvas.getBoundingClientRect();
-        mouse.x = event.x - canvasPosition.left;
-        mouse.y = event.y - canvasPosition.top;
+        mouse.x = event.x - canvasPosition.left + cam.x;
+        mouse.y = event.y - canvasPosition.top + cam.y;
         
         cursor.setCentralPosition(mouse.x, mouse.y)
     }
