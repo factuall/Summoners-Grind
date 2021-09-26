@@ -125,30 +125,36 @@ body{
 #ControlsGui{
     display: flex;
     position: absolute;
-    width: 200px;
-    left: -180px;
+    width: 270px;
+    left: -240px;
     transition: left 200ms;
     background-color: gray;
     height: 50%;
-    padding-top: 10px;
+    padding: 10px 18px;
+    padding-right: 28px;
+    border: 6px solid black;
+    border-radius: 10px;
+    flex-direction: column;
+    font-size: xx-large;
+    text-align: center;
 }
 #ControlsGui:hover{
-    left: 0px;
+    left: -20px;
+    padding-right: 10px;
+}
+#ControlsGuiContent{
+    width: 100%;
+    overflow-y: scroll;
+    font-size: medium;
 }
 #ControlsGui span{
     font-size: xx-large;
-    position: relative;
-    left: 90%;
+    position: absolute;
+    left: 92%;
     top: 45%;
     display: auto;
 }
-#ControlsGui span:last-child{
-    display: none;
-}
 #ControlsGui:hover span:first-child{
     display: none;
-}
-#ControlsGui:hover span:last-child{
-    display: block;
 }
 /************************************/
