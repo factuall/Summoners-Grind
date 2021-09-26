@@ -124,8 +124,25 @@ canvas.addEventListener('mousedown', function(event){
         canvasPosition = canvas.getBoundingClientRect();
         mouse.x = event.x - canvasPosition.left + cam.x;
         mouse.y = event.y - canvasPosition.top + cam.y;
-        
-        cursor.setCentralPosition(mouse.x, mouse.y)
+        let pointer = new Life();
+        pointer.w = 10; pointer.h = 10;
+        pointer.setCentralPosition(mouse.x, mouse.y);
+        let dontMoveCursor = false;
+        objects.forEach(object => {
+            if(CollisionDetection(object, pointer)){
+                if(player.tryTarget(object)){
+                    dontMoveCursor = true;
+                }
+            }
+        });
+        if(!dontMoveCursor) {
+            player.state = "move";
+            cursor.setCentralPosition(mouse.x, mouse.y);
+            cursor.drawContent = "#000000";
+        }else{
+            cursor.drawContent = "rgb(0, 0, 0, 0)";
+            player.state = "target";
+        }
     }
 });
 

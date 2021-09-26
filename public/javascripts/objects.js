@@ -83,15 +83,16 @@ class Player extends Life{
     }
 
     updateObject(){
-        this.inPosition = (CollisionDetection(this, cursor));
-        if(!this.inPosition){
-            let destination = GetFacingVectorCC(this, cursor);
-            this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
+        if(this.state == "move"){
+            this.inPosition = (CollisionDetection(this, cursor));
+            if(!this.inPosition){
+                let destination = GetFacingVectorCC(this, cursor);
+                this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
+            }
+            this.skills.forEach(playerSkill => {
+                playerSkill.clock += deltaTime;
+            });
         }
-        this.skills.forEach(playerSkill => {
-            playerSkill.clock += deltaTime;
-        });
-        
     }
 
     updateGUI(){
@@ -110,7 +111,12 @@ class Player extends Life{
         });
     }
 
-    
+    tryTarget(object){
+        if(object.name == "Enemy"){
+            return true;
+        }
+        return false;
+    }
 
     inputKey(e){
         this.skills.forEach(playerSkill => {
