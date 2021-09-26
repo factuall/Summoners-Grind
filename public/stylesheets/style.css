@@ -119,3 +119,36 @@ body{
 /*.StatBar:hover{
     width: 20%;
 }*/
+
+/************************************/
+/*KEYBOARD BINDING/CONTROLS INFO GUI*/
+#ControlsGui{
+    display: flex;
+    position: absolute;
+    width: 200px;
+    left: -180px;
+    transition: left 200ms;
+    background-color: gray;
+    height: 50%;
+    padding-top: 10px;
+}
+#ControlsGui:hover{
+    left: 0px;
+}
+#ControlsGui span{
+    font-size: xx-large;
+    position: relative;
+    left: 90%;
+    top: 45%;
+    display: auto;
+}
+#ControlsGui span:last-child{
+    display: none;
+}
+#ControlsGui:hover span:first-child{
+    display: none;
+}
+#ControlsGui:hover span:last-child{
+    display: block;
+}
+/************************************/
