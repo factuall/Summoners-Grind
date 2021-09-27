@@ -157,4 +157,8 @@ body{
 #ControlsGui:hover span:first-child{
     display: none;
 }
+
+.Keybind{
+    display: flex;
+}
 /************************************/
