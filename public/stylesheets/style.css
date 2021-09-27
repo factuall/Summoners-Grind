@@ -160,5 +160,15 @@ body{
 
 .Keybind{
     display: flex;
+    margin: 8px;
+    font-size: large;
+}
+.BindButton{
+    min-width: 50px;
+    background-color: bisque;
+    transition: background-color 200ms;
+    margin-right: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 /************************************/
