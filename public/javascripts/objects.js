@@ -66,10 +66,10 @@ class Player extends Life{
         this.maxMana = 200;
         //skills
         this.skills = [];
-        this.skills.push(new Skill("KeyQ", "Q", 60));
-        this.skills.push(new Skill("KeyW", "W", 200));
-        this.skills.push(new Skill("KeyE", "E", 300));
-        this.skills.push(new Skill("KeyR", "R", 400));
+        this.skills.push(new Skill("SkillQ", "Q", 60));
+        this.skills.push(new Skill("SkillW", "W", 200));
+        this.skills.push(new Skill("SkillE", "E", 300));
+        this.skills.push(new Skill("SkillR", "R", 400));
         //sprite
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
         //camera flag
@@ -118,9 +118,9 @@ class Player extends Life{
         return false;
     }
 
-    inputKey(e){
+    playerInput(e){
         this.skills.forEach(playerSkill => {
-            if(e.code == playerSkill.keycode && playerSkill.clock > playerSkill.cooldown){
+            if(e.type == playerSkill.keybind && playerSkill.clock > playerSkill.cooldown){
                 playerSkill.clock = 0;
             }
         });
