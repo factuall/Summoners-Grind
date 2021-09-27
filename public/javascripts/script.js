@@ -39,7 +39,6 @@ function keyPressed(e) {
             lockcam = !lockcam;
             break;
     }
-    player.inputKey(e);
 }
 
 //update and render setup
@@ -110,6 +109,10 @@ trawusia.h = 600;
 trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
 objects.push(trawusia);
 var player = new Player();
+document.addEventListener('SkillQ', e => {player.playerInput(e)});
+document.addEventListener('SkillW', e => {player.playerInput(e)});
+document.addEventListener('SkillE', e => {player.playerInput(e)});
+document.addEventListener('SkillR', e => {player.playerInput(e)});
 player.health = player.maxHealth;
 objects.push(player);
 var cursor = new Life();

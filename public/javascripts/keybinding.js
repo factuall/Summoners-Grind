@@ -2,11 +2,12 @@ const BIND_BUTTON_COLOR = "bisque";
 const BIND_BUTTON_COLOR_PRESSED = "white";
 
 class Keybind{
-    constructor(name, key){
+    constructor(name, key, eventName){
         this.name = name;
-        this.pressedEvent = new Event(name);
+        this.pressedEvent = new Event(eventName);
         this.keycode = "";
         this.displayKey = "";
+        this.eventName = eventName;
         this.guiChangeButton = document.createElement("div");
         this.guiChangeButton.className = "BindButton";
         this.guiOption = document.createElement("div");
@@ -26,15 +27,15 @@ class Keybind{
         this.guiChangeButton.innerHTML = this.displayKey;
     }
     bindPressed(){
-        dispatchEvent(this.pressedEvent);
+        document.dispatchEvent(this.pressedEvent);
     }
 }
 
 var controls = [];
-controls.push(new Keybind("First Skill", "KeyQ"));
-controls.push(new Keybind("Second Skill", "KeyW"));
-controls.push(new Keybind("Third Skill", "KeyE"));
-controls.push(new Keybind("Ultimate Skill", "KeyR"));
+controls.push(new Keybind("First Skill", "KeyQ", "SkillQ"));
+controls.push(new Keybind("Second Skill", "KeyW", "SkillW"));
+controls.push(new Keybind("Third Skill", "KeyE", "SkillE"));
+controls.push(new Keybind("Ultimate Skill", "KeyR", "SkillR"));
 document.addEventListener('keypress', e =>{
     controls.forEach(k =>{
 
