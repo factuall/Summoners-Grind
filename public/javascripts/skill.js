@@ -1,8 +1,13 @@
 class Skill{
-    constructor(keybind, label, cooldown){
+    constructor(keybind, keybindNumber, cooldown){
         this.keybind = keybind;
-        this.label = label;
+        this.keybindNumber = keybindNumber;
+        this.label = controls[keybindNumber].displayKey;
         this.cooldown = cooldown;
         this.clock = 0;
+    }
+
+    updateSkillLabel(){
+        this.label = controls[this.keybindNumber].displayKey;
     }
 }

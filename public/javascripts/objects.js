@@ -66,10 +66,10 @@ class Player extends Life{
         this.maxMana = 200;
         //skills
         this.skills = [];
-        this.skills.push(new Skill("SkillQ", "Q", 60));
-        this.skills.push(new Skill("SkillW", "W", 200));
-        this.skills.push(new Skill("SkillE", "E", 300));
-        this.skills.push(new Skill("SkillR", "R", 400));
+        this.skills.push(new Skill("SkillQ", 0, 60));
+        this.skills.push(new Skill("SkillW", 1, 200));
+        this.skills.push(new Skill("SkillE", 2, 300));
+        this.skills.push(new Skill("SkillR", 3, 400));
         //sprite
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
         //camera flag
@@ -93,9 +93,12 @@ class Player extends Life{
                 playerSkill.clock += deltaTime;
             });
         }
+
     }
 
-    updateGUI(){
+    renderObject(){
+        super.renderObject();
+        /************GUI***********/
         //health and mana bars
         HPBar.innerHTML = this.health + " / " + this.maxHealth;
         if(this.health > 0) HPBar.style.width = (100 * (this.health / this.maxHealth)) - 1 + "%";
@@ -105,10 +108,11 @@ class Player extends Life{
         else MPBar.style.width = "0px";
         //skills
         this.skills.forEach(function(playerSkill, i){
+            playerSkill.updateSkillLabel();
             SkillsGUI[i].style.filter = (playerSkill.clock >= playerSkill.cooldown) ? "brightness(100%)" : "brightness(50%)";
             let timeLeft = (playerSkill.cooldown - playerSkill.clock) / 60;
             SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock >= playerSkill.cooldown) ? "" : HTMLBEAK + timeLeft.toFixed(1) + "s");
-        });
+        });        
     }
 
     tryTarget(object){

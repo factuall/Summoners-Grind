@@ -18,29 +18,6 @@ SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
 SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
 SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
 
-var lockcam = false;
-//keyboard
-document.addEventListener('keypress', keyPressed);
-function keyPressed(e) {
-    switch(e.code){
-        case "KeyL":
-            cam.x += 10;
-            break;
-        case "KeyJ":
-            cam.x -= 10;
-            break;
-        case "KeyI":
-            cam.y -= 10;
-            break;
-        case "KeyK":
-            cam.y += 10;
-            break;
-        case "KeyY":
-            lockcam = !lockcam;
-            break;
-    }
-}
-
 //update and render setup
 const perfectFrameTime = 1000 / 60;
 let deltaTime = 0;
@@ -91,12 +68,12 @@ function drawObject(x, y, w, h, content){
     }
 }
 
+var lockcam = false;
 function render(){
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
         object.renderObject();
     });
-    player.updateGUI();
     if(lockcam){
         cam.x = player.x - (cam.width / 2) + (player.w / 2);
         cam.y = player.y - (cam.height / 2) + (player.h / 2); 
@@ -109,10 +86,6 @@ trawusia.h = 600;
 trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
 objects.push(trawusia);
 var player = new Player();
-document.addEventListener('SkillQ', e => {player.playerInput(e)});
-document.addEventListener('SkillW', e => {player.playerInput(e)});
-document.addEventListener('SkillE', e => {player.playerInput(e)});
-document.addEventListener('SkillR', e => {player.playerInput(e)});
 player.health = player.maxHealth;
 objects.push(player);
 var cursor = new Life();
@@ -167,3 +140,9 @@ function update(timestamp){
 }
 
 start();
+
+document.addEventListener('SkillQ', e => {player.playerInput(e)});
+document.addEventListener('SkillW', e => {player.playerInput(e)});
+document.addEventListener('SkillE', e => {player.playerInput(e)});
+document.addEventListener('SkillR', e => {player.playerInput(e)});
+document.addEventListener('LockCam', e => {lockcam = !lockcam});

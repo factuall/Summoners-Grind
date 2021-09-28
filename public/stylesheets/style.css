@@ -165,6 +165,7 @@ body{
 }
 .BindButton{
     min-width: 50px;
+    max-height: 24px;
     background-color: bisque;
     transition: background-color 200ms;
     margin-right: 5px;
