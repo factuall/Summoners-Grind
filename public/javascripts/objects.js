@@ -74,6 +74,13 @@ class Player extends Life{
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
         //camera flag
         this.cameraFollow = true;
+        //combat
+        this.target = "None"
+        this.range = 200;
+        this.championType = "range";
+        this.attackDamage = 20;
+        this.attackSpeed = 20;
+        this.lastAttack = 0;
     }
 
     damagePlayer(damage){
@@ -92,8 +99,31 @@ class Player extends Life{
             this.skills.forEach(playerSkill => {
                 playerSkill.clock += deltaTime;
             });
+        }else if(this.state == "target"){
+            if(!CollisionDetection(this,objects[this.target])){
+                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.championType == "range"){
+                    this.tryToAttack();
+                }else{
+                    let destination = GetFacingVector(this, objects[this.target]);
+                    this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
+                }
+            }else if(this.championType == "melee"){
+                this.tryToAttack();
+            }
         }
+        this.lastAttack++;
+    }
 
+    tryToAttack(){
+        if(this.lastAttack > 1000 / this.attackSpeed){
+            if(this.championType == "melee") {
+                this.lastAttack = 0;
+                player.damagePlayer(this.attackDamage);
+            }else{
+                this.lastAttack = 0;
+                objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
+            }
+        }
     }
 
     renderObject(){
@@ -117,9 +147,14 @@ class Player extends Life{
 
     tryTarget(object){
         if(object.name == "Enemy"){
+            this.target = object.index;
             return true;
         }
         return false;
+    }
+
+    stopTargetting(){
+        this.target = "None";
     }
 
     playerInput(e){
@@ -136,15 +171,16 @@ class Enemy extends Life{
         super();
         this.x = 400;
         this.y = 400;
+        this.name = "Enemy";
+        this.enemyname = "Range"
+        //combat
+        this.target = "None"
+        this.range = 200;
+        this.enemyType = "range";
         this.attackDamage = 20;
         this.attackSpeed = 8;
         this.lastAttack = 0;
-        this.name = "Enemy";
-        this.enemyname = "Range"
-        this.target = "None"
-        this.range = 200;
-        //melee or range
-        this.enemyType = "range";
+        //sprite
         this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateObject(){

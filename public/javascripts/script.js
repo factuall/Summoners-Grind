@@ -113,6 +113,7 @@ canvas.addEventListener('mousedown', function(event){
         });
         if(!dontMoveCursor) {
             player.state = "move";
+            player.target = "None";
             cursor.setCentralPosition(mouse.x, mouse.y);
             cursor.drawContent = "#000000";
         }else{
