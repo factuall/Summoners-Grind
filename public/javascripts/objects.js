@@ -1,4 +1,4 @@
-class Life{
+class Entity{
     constructor(){
         this.index = objects.length;
         this.name = "Object";
@@ -44,7 +44,7 @@ class Life{
     }
 }
 
-class Trash extends Life{
+class Trash extends Entity{
     constructor(){
         super();
         this.name = "Trash";
@@ -53,7 +53,7 @@ class Trash extends Life{
     }
 }
 
-class Player extends Life{
+class Player extends Entity{
     constructor(){
         super();
         this.name = "Player";
@@ -83,7 +83,7 @@ class Player extends Life{
         this.lastAttack = 0;
     }
 
-    damagePlayer(damage){
+    dealDamage(damage){
         if(this.health >= damage)
         this.health -= damage;
 
@@ -118,7 +118,7 @@ class Player extends Life{
         if(this.lastAttack > 1000 / this.attackSpeed){
             if(this.championType == "melee") {
                 this.lastAttack = 0;
-                player.damagePlayer(this.attackDamage);
+                player.dealDamage(this.attackDamage);
             }else{
                 this.lastAttack = 0;
                 objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
@@ -166,13 +166,18 @@ class Player extends Life{
     }
 };
 
-class Enemy extends Life{
+class Enemy extends Entity{
     constructor(){
         super();
         this.x = 400;
         this.y = 400;
         this.name = "Enemy";
         this.enemyname = "Range"
+        //stats
+        this.health = 20;
+        this.maxHealth = 20;
+        this.mana = 200;
+        this.maxMana = 200;
         //combat
         this.target = "None"
         this.range = 200;
@@ -184,52 +189,54 @@ class Enemy extends Life{
         this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateObject(){
-        if(this.target == "None"){
-            let closest;
-            let closestDist = Number.MAX_SAFE_INTEGER;
+        if(this.health > 0){
+            if(this.target == "None"){
+                let closest;
+                let closestDist = Number.MAX_SAFE_INTEGER;
+                objects.forEach(element => {
+                    if(element.name == "Player" || element.name == "Ally"){
+                        let distance = GetDistanceBetweenObjects(this, element);
+                        if(distance < closestDist){
+                            closestDist = distance;
+                            closest = element.index;
+                        }
+                    }
+                });
+    
+                this.target = closest;
+            }
+    
+            let collided = false;
             objects.forEach(element => {
-                if(element.name == "Player" || element.name == "Ally"){
-                    let distance = GetDistanceBetweenObjects(this, element);
-                    if(distance < closestDist){
-                        closestDist = distance;
-                        closest = element.index;
+                if(CollisionDetection(this,element) && element!=this && cursor != element){
+                    if(element.name == "Player") collided = true;
+                    if(element.name == "Enemy" && !collided){
+                        let destination = GetFacingVector(this, element);
+                        this.move(destination.x*deltaTime,destination.y*deltaTime);
+                        collided = true;
                     }
                 }
+    
             });
-
-            this.target = closest;
-        }
-
-        let collided = false;
-        objects.forEach(element => {
-            if(CollisionDetection(this,element) && element!=this && cursor != element){
-                if(element.name == "Player") collided = true;
-                if(element.name == "Enemy" && !collided){
-                    let destination = GetFacingVector(this, element);
-                    this.move(destination.x*deltaTime,destination.y*deltaTime);
-                    collided = true;
+            if(!CollisionDetection(this,objects[this.target])){
+                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.enemyType == "range"){
+                    this.tryToAttack();
+                }else{
+                    let destination = GetFacingVector(this, objects[this.target]);
+                    this.move(-destination.x*deltaTime,-destination.y*deltaTime);
                 }
-            }
-
-        });
-        if(!CollisionDetection(this,objects[this.target])){
-            if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.enemyType == "range"){
+            }else if(this.enemyType == "melee"){
                 this.tryToAttack();
-            }else{
-                let destination = GetFacingVector(this, objects[this.target]);
-                this.move(-destination.x*deltaTime,-destination.y*deltaTime);
             }
-        }else if(this.enemyType == "melee"){
-            this.tryToAttack();
+            this.lastAttack++;
         }
-        this.lastAttack++;
     }
     
     tryToAttack(){
         if(this.lastAttack > 1000 / this.attackSpeed){
             if(this.enemyType == "melee") {
                 this.lastAttack = 0;
-                player.damagePlayer(this.attackDamage);
+                player.dealDamage(this.attackDamage);
             }else{
                 this.lastAttack = 0;
                 objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
@@ -237,9 +244,14 @@ class Enemy extends Life{
         }
 
     }
+
+    dealDamage(damage){
+        if(this.health >= damage)
+        this.health -= damage;
+    }
 }
 
-class Projectile extends Life{
+class Projectile extends Entity{
     constructor(source, target, speed, damage){
         super();
         this.source = source;
@@ -260,7 +272,7 @@ class Projectile extends Life{
         this.move(-destination.x*deltaTime*this.speed, -destination.y*deltaTime*this.speed);
     
         if(CollisionDetection(this,this.target)){
-            if(this.target.name == "Player") this.target.damagePlayer(this.damage);
+            this.target.dealDamage(this.damage);
             objects[this.index] = new Trash();
         }
     }

@@ -80,7 +80,7 @@ function render(){
     }
 }
 
-var trawusia = new Life();
+var trawusia = new Entity();
 trawusia.w = 800;
 trawusia.h = 600;
 trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
@@ -88,7 +88,7 @@ objects.push(trawusia);
 var player = new Player();
 player.health = player.maxHealth;
 objects.push(player);
-var cursor = new Life();
+var cursor = new Entity();
 cursor.w = 10;
 cursor.h = 10;
 cursor.c = "rgba(225,225,225,0.4)";
@@ -100,7 +100,7 @@ canvas.addEventListener('mousedown', function(event){
         canvasPosition = canvas.getBoundingClientRect();
         mouse.x = event.x - canvasPosition.left + cam.x;
         mouse.y = event.y - canvasPosition.top + cam.y;
-        let pointer = new Life();
+        let pointer = new Entity();
         pointer.w = 10; pointer.h = 10;
         pointer.setCentralPosition(mouse.x, mouse.y);
         let dontMoveCursor = false;
