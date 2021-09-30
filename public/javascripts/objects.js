@@ -115,19 +115,18 @@ class CombatEntity extends Entity{
             this.tryToAttack();
         }
     }
+
+    updateObject(){
+        this.lastAttack++;
+    }
 }
 
-class Player extends Entity{
+class Player extends CombatEntity{
     constructor(){
         super();
         this.name = "Player";
         this.inPosition = true;
         this.underAttack = true;
-        //stats
-        this.health = 1000;
-        this.maxHealth = 1200;
-        this.mana = 200;
-        this.maxMana = 200;
         //skills
         this.skills = [];
         this.skills.push(new Skill("SkillQ", 0, 60));
@@ -138,19 +137,6 @@ class Player extends Entity{
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
         //camera flag
         this.cameraFollow = true;
-        //combat
-        this.target = "None"
-        this.range = 200;
-        this.championType = "range";
-        this.attackDamage = 20;
-        this.attackSpeed = 20;
-        this.lastAttack = 0;
-    }
-
-    dealDamage(damage){
-        if(this.health >= damage)
-        this.health -= damage;
-
     }
 
     updateObject(){
@@ -164,30 +150,9 @@ class Player extends Entity{
                 playerSkill.clock += deltaTime;
             });
         }else if(this.state == "target"){
-            if(!CollisionDetection(this,objects[this.target])){
-                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.championType == "range"){
-                    this.tryToAttack();
-                }else{
-                    let destination = GetFacingVector(this, objects[this.target]);
-                    this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
-                }
-            }else if(this.championType == "melee"){
-                this.tryToAttack();
-            }
+            this.combatTarget();
         }
-        this.lastAttack++;
-    }
-
-    tryToAttack(){
-        if(this.lastAttack > 1000 / this.attackSpeed){
-            if(this.championType == "melee") {
-                this.lastAttack = 0;
-                player.dealDamage(this.attackDamage);
-            }else{
-                this.lastAttack = 0;
-                objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
-            }
-        }
+        super.updateObject();
     }
 
     renderObject(){
@@ -230,7 +195,7 @@ class Player extends Entity{
     }
 };
 
-class Enemy extends Entity{
+class Enemy extends CombatEntity{
     constructor(){
         super();
         this.x = 400;
@@ -242,13 +207,11 @@ class Enemy extends Entity{
         this.maxHealth = 20;
         this.mana = 200;
         this.maxMana = 200;
+        this.moveSpeed = 1;
         //combat
-        this.target = "None"
         this.range = 200;
-        this.enemyType = "range";
         this.attackDamage = 20;
         this.attackSpeed = 8;
-        this.lastAttack = 0;
         //sprite
         this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
@@ -270,48 +233,9 @@ class Enemy extends Entity{
                 this.target = closest;
             }
     
-            let collided = false;
-            objects.forEach(element => {
-                if(CollisionDetection(this,element) && element!=this && cursor != element){
-                    if(element.name == "Player") collided = true;
-                    if(element.name == "Enemy" && !collided){
-                        let destination = GetFacingVector(this, element);
-                        this.move(destination.x*deltaTime,destination.y*deltaTime);
-                        //collided = true;
-                    }
-                }
-    
-            });
-            if(!CollisionDetection(this,objects[this.target])){
-                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.enemyType == "range"){
-                    this.tryToAttack();
-                }else{
-                    let destination = GetFacingVector(this, objects[this.target]);
-                    this.move(-destination.x*deltaTime,-destination.y*deltaTime);
-                }
-            }else if(this.enemyType == "melee"){
-                this.tryToAttack();
-            }
-            this.lastAttack++;
+            this.combatTarget();
+            super.updateObject();
         }
-    }
-    
-    tryToAttack(){
-        if(this.lastAttack > 1000 / this.attackSpeed){
-            if(this.enemyType == "melee") {
-                this.lastAttack = 0;
-                player.dealDamage(this.attackDamage);
-            }else{
-                this.lastAttack = 0;
-                objects.push(new Projectile(this, objects[this.target], 4, this.attackDamage));
-            }
-        }
-
-    }
-
-    dealDamage(damage){
-        if(this.health >= damage)
-        this.health -= damage;
     }
 }
 

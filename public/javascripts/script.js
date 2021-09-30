@@ -127,7 +127,7 @@ objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
 eeenemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
-eeenemy.enemyType = "melee";
+eeenemy.combatType = "melee";
 objects.push(eeenemy);
 
 function update(timestamp){
