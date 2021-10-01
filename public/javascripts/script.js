@@ -127,7 +127,7 @@ objects.push(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
 eeenemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
-eeenemy.combatType = "melee";
+//eeenemy.combatType = "melee";
 objects.push(eeenemy);
 
 function update(timestamp){
@@ -136,6 +136,9 @@ function update(timestamp){
     lastTimestamp = timestamp;
     objects.forEach(element => {
         element.updateObject();
+        if(element.entityType == "CombatEntity"){
+            if(element.health <= 0) objects[element.index] = new Trash(); 
+        }
     });
 
 }
