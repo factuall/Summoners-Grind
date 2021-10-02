@@ -218,26 +218,26 @@ class Enemy extends CombatEntity{
         this.drawContent = new Sprite("/img/lucznik.png", 50, 50);
     }
     updateObject(){
-        if(this.health > 0){
-            if(this.target == "None"){
-                let closest;
-                let closestDist = Number.MAX_SAFE_INTEGER;
-                objects.forEach(element => {
-                    if(element.name == "Player" || element.name == "Ally"){
-                        let distance = GetDistanceBetweenObjects(this, element);
-                        if(distance < closestDist){
-                            closestDist = distance;
-                            closest = element.index;
-                        }
+        if(this.target == "None"){
+            let closest;
+            let closestDist = Number.MAX_SAFE_INTEGER;
+            objects.forEach(element => {
+                if(element.name == "Player" || element.name == "Ally"){
+                    let distance = GetDistanceBetweenObjects(this, element);
+                    if(distance < closestDist){
+                        closestDist = distance;
+                        closest = element.index;
                     }
-                });
-    
-                this.target = closest;
-            }
-    
+                }
+            });
+
+            this.target = closest;
+        }else if(objects[this.target].entityType == "TrashEntity") {
+            this.target = "None"
+        }else{
             this.combatTarget();
-            super.updateObject();
         }
+        super.updateObject();
     }
 }
 
