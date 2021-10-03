@@ -244,9 +244,9 @@ class Enemy extends CombatEntity{
                 });
     
                 this.target = closest;
+            }else{
+                this.combatTarget();
             }
-    
-            this.combatTarget();
             super.updateObject();
         }
     }
