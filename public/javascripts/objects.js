@@ -95,26 +95,32 @@ class CombatEntity extends Entity{
     }
 
     combatTarget(){
-        let collided = false;
-        objects.forEach(element => {
-            if(CollisionDetection(this,element) && element!=this && cursor != element){
-                if(element.name == this.target.name) collided = true;
-                if(element.entityType == "CombatEntity" && !collided){
-                    let destination = GetFacingVector(this, element);
-                    this.move(destination.x*deltaTime,destination.y*deltaTime);
+        if(this.target != "None"){
+            if(objects[this.target].health <= 0) {
+                this.target = "None";
+                return;
+            }
+            let collided = false;
+            objects.forEach(element => {
+                if(CollisionDetection(this,element) && element!=this && cursor != element){
+                    if(element.name == this.target.name) collided = true;
+                    if(element.entityType == "CombatEntity" && !collided){
+                        let destination = GetFacingVector(this, element);
+                        this.move(destination.x*deltaTime,destination.y*deltaTime);
+                    }
                 }
-            }
-
-        });
-        if(!CollisionDetection(this,objects[this.target])){
-            if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
+    
+            });
+            if(!CollisionDetection(this,objects[this.target])){
+                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
+                    this.tryToAttack();
+                }else{
+                    let destination = GetFacingVector(this, objects[this.target]);
+                    this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
+                }
+            }else if(this.combatType == "melee"){
                 this.tryToAttack();
-            }else{
-                let destination = GetFacingVector(this, objects[this.target]);
-                this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
             }
-        }else if(this.combatType == "melee"){
-            this.tryToAttack();
         }
     }
 
@@ -153,6 +159,11 @@ class Player extends CombatEntity{
             });
         }else if(this.state == "target"){
             this.combatTarget();
+            if(this.target == "None"){
+                this.state = "move";
+                cursor.x = this.x;
+                cursor.y = this.y;
+            }
         }
         super.updateObject();
     }
@@ -195,7 +206,7 @@ class Player extends CombatEntity{
             }
         });
     }
-};
+}
 
 class Enemy extends CombatEntity{
     constructor(){
@@ -233,9 +244,10 @@ class Enemy extends CombatEntity{
                 });
     
                 this.target = closest;
+            }else{
+                this.combatTarget();
             }
     
-            this.combatTarget();
             super.updateObject();
         }
     }
@@ -266,4 +278,4 @@ class Projectile extends Entity{
             objects[this.index] = new Trash();
         }
     }
-};
+}
