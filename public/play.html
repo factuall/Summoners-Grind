@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, inital-scale=1.0">
+        <title>Summoners Grind</title>
+        <link rel="stylesheet" href="/stylesheets/gamestyle.css">
+    </head>
+    <body>
+        <div id="ControlsGui">
+            <span>></span>
+            Controls
+            <div id="ControlsGuiContent">
+            </div>
+        </div>
+        <div id="PlayerGui">    
+            <div id="PlayerImage"></div>
+            <div id="PlayerUI">
+                <div id="PlayerSkills">
+                    <div class="Skill">Q</div>
+                    <div class="Skill">W</div>
+                    <div class="Skill">E</div>
+                    <div class="Skill">R</div>
+                    <div class="SkillSpacer"></div>
+                    <div class="Skill">D</div>
+                    <div class="Skill">F</div>
+                    <div class="SkillSpacer"></div>
+                    <div class="Skill">B</div>
+                </div>
+                <div id="PlayerStats">
+                    <div class="Container" id="ContainerHP">
+                        <div class="StatBar" id="HealthBar">XXX%</div>
+                    </div>
+                    <div class="Container" id="ContainerMP">
+                        <div class="StatBar" id="ManaBar">XXX%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <canvas id="GameScreen"></canvas>
+        <script src="/javascripts/math-helper.js"></script>
+        <script src="/javascripts/keybinding.js"></script>
+        <script src="/javascripts/skill.js"></script>
+        <script src="/javascripts/graphics.js"></script>
+        <script src="/javascripts/objects.js"></script>
+        <script src="/javascripts/script.js"></script>
+    </body>
+</html>

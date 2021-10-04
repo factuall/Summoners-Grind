@@ -1,0 +1,35 @@
+body{
+    display: flex;
+    background-color: darkslategray;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#title{
+    margin-top: 20vh;
+    margin-bottom: 1vh;
+    font-size: 8vw;
+}
+#sub-title{
+    font-size: 1.5vw;
+}
+button {
+    margin: 5vh;
+    
+    background-color: #4cd857; /* Green */
+    border: 2px solid black;
+    border-radius: 10px;
+    color: white;
+    padding: 1vh 2vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5vw;
+    cursor: pointer;
+    transition: background-color 100ms;
+}
+button:hover{
+    background-color: green;
+}
