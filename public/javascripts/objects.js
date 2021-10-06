@@ -72,8 +72,16 @@ class CombatEntity extends Entity{
         this.attackDamage = 20;
         this.attackSpeed = 20;
         this.lastAttack = 0;
+        this.attackPreDelay = 0;
         //combat //important only if combat type is range
         this.projectileSpeed = 4;
+        //hp bar
+        this.EntityInfoDisplay = new CombatEntityInfo(this);
+    }
+
+    renderObject(){
+        super.renderObject();
+        this.EntityInfoDisplay.renderObject();
     }
 
     dealDamage(damage){
@@ -84,12 +92,16 @@ class CombatEntity extends Entity{
 
     tryToAttack(){
         if(this.lastAttack > (1000 / this.attackSpeed)){
-            if(this.combatType == "melee") {
+            if(this.attackPreDelay > (100 / this.attackSpeed)){
+                if(this.combatType == "melee") {
+                    objects[this.target].dealDamage(this.attackDamage);
+                }else{
+                    objects.push(new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage));
+                }
+                this.attackPreDelay = 0;
                 this.lastAttack = 0;
-                objects[this.target].dealDamage(this.attackDamage);
             }else{
-                this.lastAttack = 0;
-                objects.push(new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage));
+                this.attackPreDelay += deltaTime;
             }
         }
     }
@@ -126,6 +138,7 @@ class CombatEntity extends Entity{
 
     updateObject(){
         this.lastAttack++;
+        this.EntityInfoDisplay.updateObject();
     }
 }
 
@@ -145,6 +158,7 @@ class Player extends CombatEntity{
         this.drawContent = new Sprite("/img/hipek.png", 50, 50);
         //camera flag
         this.cameraFollow = true;
+        
     }
 
     updateObject(){
@@ -216,8 +230,8 @@ class Enemy extends CombatEntity{
         this.name = "Enemy";
         this.enemyname = "Range"
         //stats
-        this.health = 20;
-        this.maxHealth = 20;
+        this.health = 60;
+        this.maxHealth = 60;
         this.mana = 200;
         this.maxMana = 200;
         this.moveSpeed = 1;
@@ -276,5 +290,29 @@ class Projectile extends Entity{
             this.target.dealDamage(this.damage);
             objects[this.index] = new Trash();
         }
+    }
+}
+
+class CombatEntityInfo extends Entity{
+    constructor(owner){
+        super();
+        this.h = 8;
+        this.w = 64;
+        this.owner = owner;
+        this.healthBar = new Entity();
+        this.healthBar.w = 60;
+        this.healthBar.h = 6;
+        this.healthBar.drawContent = "#ff0000";
+    }
+    updateObject(){
+        let healthPercentage = this.owner.health / this.owner.maxHealth;
+        this.setCentralPosition(this.owner.ox, this.owner.y - 10);
+        this.healthBar.setCentralPosition(this.x + (this.healthBar.w / 2) + 2, this.oy);
+        this.healthBar.w = 60 * healthPercentage;
+        super.updateObject();
+    }
+    renderObject(){
+        super.renderObject();
+        this.healthBar.renderObject();
     }
 }
