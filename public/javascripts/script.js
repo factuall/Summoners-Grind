@@ -55,6 +55,12 @@ function drawImage(x, y, w, h, s){
     ctx.drawImage(s, x, y, w, h);
 }
 
+function drawText(text, style, color, x, y){
+    ctx.font = style;
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+}
+
 function drawObject(x, y, w, h, content){
     let objViewPos = cam.getViewPosition(x, y);
     //Detect if object is in camera's view
@@ -63,8 +69,17 @@ function drawObject(x, y, w, h, content){
         objViewPos.objViewY < 0 + cam.height &&
         objViewPos.objViewY + h > 0){
         //if yes, then render it to canvas
-        if(typeof content == "string") drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
-        else drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
+        switch(content.constructor.name){
+            case "Sprite":
+                drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
+                break;
+            case "TextSprite":
+                drawText(content.text, content.getStyle(), content.color, objViewPos.objViewX, objViewPos.objViewY);
+                break;
+            case "String":
+                drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
+                break;
+        }
     }
 }
 

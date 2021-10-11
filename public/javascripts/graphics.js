@@ -13,6 +13,18 @@ class Sprite{
     }
 }
 
+class TextSprite{
+    constructor(text, font, size, color){
+        this.text = text;
+        this.font = font;
+        this.size = size;
+        this.color = color;
+    }
+    getStyle(){
+        return this.size + "px " + this.font;
+    }
+}
+
 class Camera{
     constructor(x, y, w, h){
         this.x = x;
