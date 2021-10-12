@@ -1,8 +1,8 @@
 //canvas setup
 const canvas = document.getElementById('GameScreen');
 const ctx = canvas.getContext('2d');
-canvas.width = 800;
-canvas.height = 600;
+canvas.width = getScreenWidth();
+canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
 var objects = [];
 
