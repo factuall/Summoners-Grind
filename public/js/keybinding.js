@@ -31,17 +31,8 @@ class Keybind{
     }
 }
 
-
-
-
-var controls = [];
-controls.push(new Keybind("First Skill", "KeyQ", "SkillQ"));
-controls.push(new Keybind("Second Skill", "KeyW", "SkillW"));
-controls.push(new Keybind("Third Skill", "KeyE", "SkillE"));
-controls.push(new Keybind("Ultimate Skill", "KeyR", "SkillR"));
-controls.push(new Keybind("Lock/Unlock camera", "KeyY", "LockCam"));
-
-
+export var controls = [];
+allControlsHere();
 
 document.addEventListener('keypress', e =>{
     controls.forEach(k =>{
@@ -59,7 +50,6 @@ document.addEventListener('keypress', e =>{
 
 var ControlsGui = document.getElementById('ControlsGuiContent');
 
-
 controls.forEach(k =>{
     ControlsGui.appendChild(k.guiOption);
     k.guiChangeButton.addEventListener('click', function(){
@@ -68,3 +58,11 @@ controls.forEach(k =>{
         else k.guiChangeButton.style.backgroundColor = BIND_BUTTON_COLOR;
     });
 });
+
+function allControlsHere(){  // options label // keycode // event name
+    controls.push(new Keybind("First Skill", "KeyQ", "SkillQ"));
+    controls.push(new Keybind("Second Skill", "KeyW", "SkillW"));
+    controls.push(new Keybind("Third Skill", "KeyE", "SkillE"));
+    controls.push(new Keybind("Ultimate Skill", "KeyR", "SkillR"));
+    controls.push(new Keybind("Lock/Unlock camera", "KeyY", "LockCam"));
+}
