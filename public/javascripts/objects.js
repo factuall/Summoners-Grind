@@ -266,6 +266,7 @@ class Enemy extends CombatEntity{
     }
 }
 
+var SPELL_ICE = importAudio('/sounds/spell_ice.wav');
 class Projectile extends Entity{
     constructor(source, target, speed, damage){
         super();
@@ -280,6 +281,7 @@ class Projectile extends Entity{
         this.updateCetralPosition();
         this.drawContent = "#ffff33";
         this.name = "Projectile";
+        tempAudioSrc('/sounds/spell_ice.wav');
     }
     
     updateObject(){
