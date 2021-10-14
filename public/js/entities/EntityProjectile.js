@@ -1,6 +1,6 @@
 import { Entity } from './bases/Entity.js';
-import * as mathhelper from "/js/math-helper.js";
-import { objects, setObjects } from "/js/wrapper.js";
+import * as mathhelper from "/js/mathhelper.js";
+import { objects, syncObjects } from "/js/wrapper.js";
 import { Trash } from "/js/entities/Trash.js";
 
 export class Projectile extends Entity{
@@ -18,7 +18,6 @@ export class Projectile extends Entity{
         this.updateCetralPosition();
         this.drawContent = "#ffff33";
         this.name = "Projectile";
-        //tempAudioSrc('/sounds/spell_ice.wav');
     }
     
     updateObject(deltaTime){
@@ -30,7 +29,7 @@ export class Projectile extends Entity{
             this.entityType = "TrashEntity";
             let objectsList = objects;
             objectsList[this.index] = new Trash();
-            setObjects(objectsList);
+            syncObjects(objectsList);
         }
     }
 }

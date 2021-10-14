@@ -1,7 +1,10 @@
-//module is allowing simpler communication between main module and rest of them
+//
+// this module is allowing entities to see 
+// global objects list and even affect it
+//
 export var objects = [];
 
-export function setObjects(objs){
+export function syncObjects(objs){
     objects = objs;
 }
 

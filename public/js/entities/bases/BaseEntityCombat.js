@@ -1,7 +1,7 @@
 import { Entity } from "/js/entities/bases/Entity.js";
 import { CombatEntityInfo } from "/js/entities/EntityCombatInfo.js";
 import { objects, pushObject } from "/js/wrapper.js";
-import * as mathhelper from "/js/math-helper.js";
+import * as mathhelper from "/js/mathhelper.js";
 import { cursor } from "/js/mouse.js";
 import { Projectile } from "/js/entities/EntityProjectile.js";
 
@@ -40,14 +40,14 @@ export class CombatEntity extends Entity{
 
     }
 
-    tryToAttack(deltaTime){
+    tryToAttack(deltaTime, isRange){
         if(this.lastAttack > (1000 / this.attackSpeed)){
             if(this.attackPreDelay > (100 / this.attackSpeed)){
-                if(this.combatType == "melee") {
+                if(!isRange) {
                     objects[this.target].dealDamage(this.attackDamage);
                 }else{
-                    let gowno = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage, objects.length);
-                    pushObject(gowno);
+                    let newProjectile = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage, objects.length);
+                    pushObject(newProjectile);
                 }
                 this.attackPreDelay = 0;
                 this.lastAttack = 0;
@@ -77,13 +77,13 @@ export class CombatEntity extends Entity{
             });
             if(!mathhelper.CollisionDetection(this,objects[this.target])){
                 if(mathhelper.GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
-                    this.tryToAttack(deltaTime);
+                    this.tryToAttack(deltaTime, true);
                 }else{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
                 }
             }else if(this.combatType == "melee"){
-                this.tryToAttack(deltaTime);
+                this.tryToAttack(deltaTime, false);
             }
         }
     }

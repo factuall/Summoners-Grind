@@ -1,7 +1,11 @@
 import { Entity } from "/js/entities/bases/Entity.js";
 import { objects } from "/js/wrapper.js";
-import * as mathhelper from "/js/math-helper.js";
+import * as mathhelper from "/js/mathhelper.js";
 import { camera } from "/js/graphics.js";
+
+export var canvas;
+export var canvasPosition;
+export var cursor;
 
 export const mouse = {
     x: 0,
@@ -9,18 +13,13 @@ export const mouse = {
     click: false
 }
 
-export var canvas;
-export var canvasPosition;
-
-export var cursor;
-
+// sync cursor object with one defined in main module
 export function setCursor(crs){
     cursor = crs;
 }
 
-export function setCanvas(cvs){
+export function canvasReady(cvs){
     canvas = cvs;
-    
     canvas.addEventListener('mousedown', function(event){
         if(event.button === 0){
     
@@ -43,3 +42,7 @@ export function setCanvas(cvs){
         }
     });
 }
+
+window.addEventListener('contextmenu', function (e) { 
+    e.preventDefault(); 
+}, false);

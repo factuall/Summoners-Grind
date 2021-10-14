@@ -1,6 +1,6 @@
 import { CombatEntity } from './bases/BaseEntityCombat.js';
 import * as graphics from "/js/graphics.js";
-import * as mathhelper from "/js/math-helper.js";
+import * as mathhelper from "/js/mathhelper.js";
 import { objects } from "/js/wrapper.js";
 
 export class Enemy extends CombatEntity{

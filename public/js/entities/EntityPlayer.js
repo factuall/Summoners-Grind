@@ -1,8 +1,8 @@
 import { CombatEntity } from './bases/BaseEntityCombat.js';
-import { Skill } from "/js/skill.js";
 import * as graphics from "/js/graphics.js";
 import { cursor } from "/js/mouse.js";
-import * as mathhelper from "/js/math-helper.js";
+import { controls } from "/js/keybinding.js";
+import * as mathhelper from "/js/mathhelper.js";
 
 
 const HTMLBEAK = "<br/>"
@@ -14,6 +14,20 @@ SkillsGUI[0].style.backgroundImage = "url('img/skillQ.png')"
 SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
 SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
 SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
+
+class Skill{
+    constructor(keybind, keybindNumber, cooldown){
+        this.keybind = keybind;
+        this.keybindNumber = keybindNumber;
+        this.label = controls[keybindNumber].displayKey;
+        this.cooldown = cooldown;
+        this.clock = 0;
+    }
+
+    updateSkillLabel(){
+        this.label = controls[this.keybindNumber].displayKey;
+    }
+}
 
 export class Player extends CombatEntity{
     constructor(index){
@@ -91,10 +105,6 @@ export class Player extends CombatEntity{
             this.state = "target";
             return true;
         }
-    }
-
-    stopTargetting(){
-        this.target = "None";
     }
 
     playerInput(e){

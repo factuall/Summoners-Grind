@@ -134,3 +134,67 @@ export function getScreenHeight() {
         document.documentElement.clientHeight
     );
 }
+
+export const canvas = document.getElementById('GameScreen');
+export const ctx = canvas.getContext('2d');
+canvas.width = getScreenWidth();
+canvas.height = getScreenHeight();
+ctx.font = '30px Arial'
+
+setUpCamera(canvas.width, canvas.height);
+var lockcam = false;
+
+function drawRect(x, y, w, h, c){
+    ctx.fillStyle = c;
+    ctx.fillRect(x, y, w , h);
+}
+
+function drawImage(x, y, w, h, s){
+    ctx.drawImage(s, x, y, w, h);
+}
+
+function drawText(text, style, color, x, y){
+    ctx.font = style;
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+}
+
+function drawObject(x, y, w, h, content){
+    let objViewPos = camera.getViewPosition(x, y);
+    //Detect if object is in camera's view
+    if(objViewPos.objViewX < 0 + camera.width &&
+        objViewPos.objViewX + w > 0 &&
+        objViewPos.objViewY < 0 + camera.height &&
+        objViewPos.objViewY + h > 0){
+        //if yes, then render it to canvas
+        switch(content.constructor.name){
+            case "Sprite":
+                drawImage(objViewPos.objViewX, objViewPos.objViewY, w, h, content.image);
+                break;
+            case "TextSprite":
+                drawText(content.text, content.getStyle(), content.color, objViewPos.objViewX, objViewPos.objViewY);
+                break;
+            case "String":
+                drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
+                break;
+        }
+    }
+}
+
+export function render(objects){
+    drawRect(0,0,canvas.width,canvas.height, "#505050");
+    objects.forEach(object => {
+        let objInfo = object.renderObject();
+        if(Array.isArray(objInfo)){
+            objInfo.forEach(e => {
+                drawObject(e.x, e.y, e.w, e.h, e.drawContent);
+            });
+        }else{
+            drawObject(objInfo.x, objInfo.y, objInfo.w, objInfo.h, objInfo.drawContent);
+        }
+    });
+    if(lockcam){
+        camera.x = player.x - (camera.width / 2) + (player.w / 2);
+        camera.y = player.y - (camera.height / 2) + (player.h / 2); 
+    }
+}
