@@ -1,4 +1,4 @@
-import * as mathhelper from './math-helper.js';
+import * as mathhelper from '/js/math-helper.js';
 import { importAudio } from './sounds.js';
 import { Sprite, TextSprite } from './graphics.js';
 import { Skill } from './skill.js';
