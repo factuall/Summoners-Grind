@@ -1,9 +1,13 @@
 import * as mathhelper from './math-helper.js';
 import './keybinding.js';
 import { Skill } from './skill.js';
-import { getScreenWidth, getScreenHeight, Camera, Sprite } from './graphics.js';
+import { getScreenWidth, getScreenHeight, camera, setUpCamera, Sprite } from './graphics.js';
 import './sounds.js';
-import { Entity, updateObjectList, Player, Enemy, updateCursor, dTime, Trash } from './objects.js';
+//import { Entity, updateObjectList, Player, Enemy, updateCursor, dTime, Trash } from './objects.js';
+import { Entity } from "/js/entities/bases/Entity.js";
+import { Player } from "/js/entities/EntityPlayer.js";
+import { Enemy } from "/js/entities/EntityEnemy.js";
+import * as wrapper from "/js/wrapper.js";
 
 //canvas setup
 const canvas = document.getElementById('GameScreen');
@@ -11,22 +15,14 @@ const ctx = canvas.getContext('2d');
 canvas.width = getScreenWidth();
 canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
-var objects = [];
-
-
-document.addEventListener('drawObject', obj =>{
-    drawObject(obj.detail.x, obj.detail.y, obj.detail.w, obj.detail.h, obj.detail.drawContent);
-});
-
-document.addEventListener('pushObject', obj =>{
-    pushObject(obj.detail);
-});
+export var objects = [];
+setUpCamera(canvas.width, canvas.height);
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
 let deltaTime = 0;
 let lastTimestamp = 0;
-var cam = new Camera(0, 0, canvas.width, canvas.height);
+
 function start() {
     requestAnimationFrame(update);
 }
@@ -42,16 +38,21 @@ window.addEventListener('contextmenu', function (e) {
     e.preventDefault(); 
 }, false);
 //left mouseclick
+/*
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
     x: canvas.width/2,
     y: canvas.height/2,
     click: false
-}
+}*/
+
+document.addEventListener("pushObject", objEvent => {
+    pushObject(objEvent.detail);
+});
 
 function pushObject(obj){
     objects.push(obj);
-    updateObjectList(objects);
+    wrapper.setObjects(objects);
 }
 
 function drawRect(x, y, w, h, c){
@@ -70,11 +71,11 @@ function drawText(text, style, color, x, y){
 }
 
 function drawObject(x, y, w, h, content){
-    let objViewPos = cam.getViewPosition(x, y);
+    let objViewPos = camera.getViewPosition(x, y);
     //Detect if object is in camera's view
-    if(objViewPos.objViewX < 0 + cam.width &&
+    if(objViewPos.objViewX < 0 + camera.width &&
         objViewPos.objViewX + w > 0 &&
-        objViewPos.objViewY < 0 + cam.height &&
+        objViewPos.objViewY < 0 + camera.height &&
         objViewPos.objViewY + h > 0){
         //if yes, then render it to canvas
         switch(content.constructor.name){
@@ -95,78 +96,63 @@ var lockcam = false;
 function render(){
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
-        object.renderObject();
+        let objInfo = object.renderObject();
+        if(Array.isArray(objInfo)){
+            objInfo.forEach(e => {
+                drawObject(e.x, e.y, e.w, e.h, e.drawContent);
+            });
+        }else{
+            drawObject(objInfo.x, objInfo.y, objInfo.w, objInfo.h, objInfo.drawContent);
+        }
     });
     if(lockcam){
-        cam.x = player.x - (cam.width / 2) + (player.w / 2);
-        cam.y = player.y - (cam.height / 2) + (player.h / 2); 
+        camera.x = player.x - (camera.width / 2) + (player.w / 2);
+        camera.y = player.y - (camera.height / 2) + (player.h / 2); 
     }
 }
 
-var trawusia = new Entity();
+var trawusia = new Entity(objects.length);
 trawusia.w = 800;
 trawusia.h = 600;
 trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
 pushObject(trawusia);
-var player = new Player();
+var player = new Player(objects.length);
 player.health = player.maxHealth;
 pushObject(player);
-var cursor = new Entity();
+
+var cursor = new Entity(objects.length);
 cursor.w = 10;
 cursor.h = 10;
 cursor.c = "rgba(225,225,225,0.4)";
 pushObject(cursor);
-updateCursor(cursor);
-canvas.addEventListener('mousedown', function(event){
-    if(event.button === 0){
 
-    }else{
-        canvasPosition = canvas.getBoundingClientRect();
-        mouse.x = event.x - canvasPosition.left + cam.x;
-        mouse.y = event.y - canvasPosition.top + cam.y;
-        let pointer = new Entity();
-        pointer.w = 10; pointer.h = 10;
-        pointer.setCentralPosition(mouse.x, mouse.y);
-        let dontMoveCursor = false;
-        objects.forEach(object => {
-            if(mathhelper.CollisionDetection(object, pointer)){
-                if(player.tryTarget(object)){
-                    dontMoveCursor = true;
-                }
-            }
-        });
-        if(!dontMoveCursor) {
-            player.state = "move";
-            player.target = "None";
-            cursor.setCentralPosition(mouse.x, mouse.y);
-            cursor.drawContent = "#000000";
-        }else{
-            cursor.drawContent = "rgb(0, 0, 0, 0)";
-            player.state = "target";
-        }
-    }
-});
+import * as mouse from "/js/mouse.js";
 
-pushObject(new Enemy());
-var eeenemy = new Enemy();
+mouse.setCursor(cursor);
+mouse.setCanvas(canvas);
+
+pushObject(new Enemy(objects.length));
+var eeenemy = new Enemy(objects.length);
 eeenemy.x = 600;
 eeenemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
 //eeenemy.combatType = "melee";
 pushObject(eeenemy);
 
+
+import { Trash } from "/js/entities/Trash.js";
 function update(timestamp){
     requestAnimationFrame(update);
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
-    dTime(deltaTime);
     lastTimestamp = timestamp;
     //updateCursor(objects);
     objects.forEach(element => {
-        element.updateObject();
+        if(element.entityType == "TrashEntity") return;
+        element.updateObject(deltaTime);
         if(element.entityType == "CombatEntity"){
             if(element.health <= 0) objects[element.index] = new Trash(); 
         }
     });
-
+    wrapper.setObjects(objects);
 }
 
 start();

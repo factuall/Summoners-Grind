@@ -4,6 +4,7 @@ import * as graphics from "/js/graphics.js";
 import { cursor } from "/js/mouse.js";
 import * as mathhelper from "/js/math-helper.js";
 
+
 const HTMLBEAK = "<br/>"
 const HPBar = document.getElementById('HealthBar');
 const MPBar = document.getElementById('ManaBar');
@@ -15,11 +16,12 @@ SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
 SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
 
 export class Player extends CombatEntity{
-    constructor(){
-        super();
+    constructor(index){
+        super(index);
         this.name = "Player";
         this.inPosition = true;
         this.underAttack = true;
+        this.state = "move";
         //skills
         this.skills = [];
         this.skills.push(new Skill("SkillQ", 0, 60));
@@ -30,11 +32,12 @@ export class Player extends CombatEntity{
         this.drawContent = new graphics.Sprite("/img/hipek.png", 50, 50);
         //camera flag
         this.cameraFollow = true;
-        
+        document.addEventListener("cursorClick", e => {
+            this.tryTarget(e.detail);
+        });
     }
 
     updateObject(deltaTime){
-        this.state = "move";
         if(this.state == "move"){
             this.inPosition = (mathhelper.CollisionDetection(this, cursor));
             if(!this.inPosition){
@@ -45,11 +48,10 @@ export class Player extends CombatEntity{
                 playerSkill.clock += deltaTime;
             });
         }else if(this.state == "target"){
-            this.combatTarget();
+            this.combatTarget(deltaTime);
             if(this.target == "None"){
-                this.state = "move";
-                cursor.x = this.x;
-                cursor.y = this.y;
+                cursor.ox = this.ox;
+                cursor.oy = this.oy;
             }
         }
         super.updateObject(deltaTime);
@@ -74,12 +76,21 @@ export class Player extends CombatEntity{
         return super.renderObject();
     }
 
-    tryTarget(object){
-        if(object.name == "Enemy"){
-            this.target = object.index;
+    tryTarget(clickedList){
+        let newTarget;
+        clickedList.forEach(e => {
+            if(e.name == "Enemy"){
+                this.target = e.index;
+                newTarget = e;
+            }
+        });
+        if(newTarget == undefined){
+            this.state = "move";
+            return false;
+        }else{
+            this.state = "target";
             return true;
         }
-        return false;
     }
 
     stopTargetting(){

@@ -1,4 +1,7 @@
 import { Entity } from "/js/entities/bases/Entity.js";
+import { objects } from "/js/wrapper.js";
+import * as mathhelper from "/js/math-helper.js";
+import { camera } from "/js/graphics.js";
 
 export const mouse = {
     x: 0,
@@ -23,11 +26,19 @@ export function setCanvas(cvs){
     
         }else{
             canvasPosition = canvas.getBoundingClientRect();
-            mouse.x = event.x - canvasPosition.left;
-            mouse.y = event.y - canvasPosition.top;
+            mouse.x = event.x - canvasPosition.left + camera.x;
+            mouse.y = event.y - canvasPosition.top + camera.y;
             let pointer = new Entity(0);
             pointer.w = 10; pointer.h = 10;
             pointer.setCentralPosition(mouse.x, mouse.y);
+            let clickedObjects = [];
+            objects.forEach(e => {
+                if(mathhelper.CollisionDetection(pointer, e)){
+                    clickedObjects.push(e);
+                }
+            });
+            let cursorClick = new CustomEvent('cursorClick', {detail: clickedObjects});
+            document.dispatchEvent(cursorClick);
             cursor.setCentralPosition(mouse.x, mouse.y);
         }
     });

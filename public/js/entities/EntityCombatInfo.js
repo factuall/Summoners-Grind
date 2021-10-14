@@ -4,14 +4,15 @@ import * as graphics from "/js/graphics.js";
 export class CombatEntityInfo extends Entity{
     constructor(owner){
         super();
+        this.index = 0;
         this.h = 8;
         this.w = 64;
         this.owner = owner;
-        this.healthBar = new Entity();
+        this.healthBar = new Entity(0);
         this.healthBar.w = 60;
         this.healthBar.h = 6;
         this.healthBar.drawContent = "#ff0000";
-        this.healthText = new Entity();
+        this.healthText = new Entity(0);
         this.healthText.drawContent = new graphics.TextSprite("100%", "monospace", 15, "#ffffff");
     }
     updateObject(deltaTime){
@@ -23,11 +24,19 @@ export class CombatEntityInfo extends Entity{
         this.healthText.drawContent.text = this.owner.health;
         super.updateObject(deltaTime);
     }
-    /*renderObject(){
+    renderObject(){
         if(this.owner.health < this.owner.maxHealth){
-            super.renderObject();
-            this.healthBar.renderObject();
-            this.healthText.renderObject();   
+            let renderlist = [];
+            renderlist.push({
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h,
+                drawContent: this.drawContent
+            });
+            renderlist.push(this.healthBar.renderObject());
+            renderlist.push(this.healthText.renderObject());
+            return renderlist;
         }
-    }*/
+    }
 }

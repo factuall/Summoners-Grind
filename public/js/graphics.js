@@ -50,6 +50,14 @@ export class Camera{
     }
 }
 
+export var camera = new Camera(0, 0, 800, 600);
+
+export function setUpCamera(w, h){
+    camera.width = w;
+    camera.height = h;
+}
+
+
 export class Animation{
     constructor(frames, delay, loop){
         this.currentFrame = 0;

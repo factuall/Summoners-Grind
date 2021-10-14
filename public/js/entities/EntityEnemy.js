@@ -1,9 +1,11 @@
 import { CombatEntity } from './bases/BaseEntityCombat.js';
 import * as graphics from "/js/graphics.js";
+import * as mathhelper from "/js/math-helper.js";
+import { objects } from "/js/wrapper.js";
 
 export class Enemy extends CombatEntity{
-    constructor(){
-        super();
+    constructor(index){
+        super(index);
         this.x = 400;
         this.y = 400;
         this.name = "Enemy";
@@ -26,7 +28,7 @@ export class Enemy extends CombatEntity{
             if(this.target == "None"){
                 let closest = "None";
                 let closestDist = Number.MAX_SAFE_INTEGER;
-                /*
+                
                 objects.forEach(element => {
                     if(element.name == "Player" || element.name == "Ally"){
                         let distance = mathhelper.GetDistanceBetweenObjects(this, element);
@@ -36,10 +38,12 @@ export class Enemy extends CombatEntity{
                         }
                     }
                 });
-                */
+                
+                
                 this.target = closest;
+                
             }else{
-                this.combatTarget();
+                this.combatTarget(deltaTime);
             }
             super.updateObject(deltaTime);
         }

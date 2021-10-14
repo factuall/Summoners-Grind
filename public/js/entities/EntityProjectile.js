@@ -1,8 +1,12 @@
 import { Entity } from './bases/Entity.js';
+import * as mathhelper from "/js/math-helper.js";
+import { objects, setObjects } from "/js/wrapper.js";
+import { Trash } from "/js/entities/Trash.js";
 
 export class Projectile extends Entity{
-    constructor(source, target, speed, damage){
+    constructor(source, target, speed, damage, index){
         super();
+        this.index = index;
         this.source = source;
         this.target = target;
         this.speed = speed;
@@ -23,7 +27,10 @@ export class Projectile extends Entity{
     
         if(mathhelper.CollisionDetection(this,this.target)){
             this.target.dealDamage(this.damage);
-            objects[this.index] = new Trash();
+            this.entityType = "TrashEntity";
+            let objectsList = objects;
+            objectsList[this.index] = new Trash();
+            setObjects(objectsList);
         }
     }
 }

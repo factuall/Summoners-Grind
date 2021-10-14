@@ -1,9 +1,13 @@
 import { Entity } from "/js/entities/bases/Entity.js";
 import { CombatEntityInfo } from "/js/entities/EntityCombatInfo.js";
+import { objects, pushObject } from "/js/wrapper.js";
+import * as mathhelper from "/js/math-helper.js";
+import { cursor } from "/js/mouse.js";
+import { Projectile } from "/js/entities/EntityProjectile.js";
 
 export class CombatEntity extends Entity{
-    constructor(){
-        super();
+    constructor(index){
+        super(index);
         this.entityType = "CombatEntity";
         //stats
         this.maxHealth = 1200;
@@ -36,16 +40,14 @@ export class CombatEntity extends Entity{
 
     }
 
-    tryToAttack(){
+    tryToAttack(deltaTime){
         if(this.lastAttack > (1000 / this.attackSpeed)){
             if(this.attackPreDelay > (100 / this.attackSpeed)){
                 if(this.combatType == "melee") {
                     objects[this.target].dealDamage(this.attackDamage);
                 }else{
-                    let gowno = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage);
-                    let fastevent = new CustomEvent('pushObject', {detail: gowno});
-                    document.dispatchEvent(fastevent);
-                    //objects.push(new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage));
+                    let gowno = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage, objects.length);
+                    pushObject(gowno);
                 }
                 this.attackPreDelay = 0;
                 this.lastAttack = 0;
@@ -55,8 +57,9 @@ export class CombatEntity extends Entity{
         }
     }
 
-    combatTarget(){
+    combatTarget(deltaTime){
         if(this.target != "None"){
+            if(objects[this.target] == undefined) return;
             if(objects[this.target].health <= 0) {
                 this.target = "None";
                 return;
@@ -74,13 +77,13 @@ export class CombatEntity extends Entity{
             });
             if(!mathhelper.CollisionDetection(this,objects[this.target])){
                 if(mathhelper.GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
-                    this.tryToAttack();
+                    this.tryToAttack(deltaTime);
                 }else{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
                 }
             }else if(this.combatType == "melee"){
-                this.tryToAttack();
+                this.tryToAttack(deltaTime);
             }
         }
     }
@@ -91,6 +94,21 @@ export class CombatEntity extends Entity{
     }
 
     renderObject(){
-        return super.renderObject();
+        
+        if(Array.isArray(this.EntityInfoDisplay.renderObject())){
+            let renderlist = this.EntityInfoDisplay.renderObject();
+            renderlist.push({
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h,
+                drawContent: this.drawContent
+            });
+            return renderlist;
+        }else{
+            return super.renderObject();
+        } 
+        
+        
     }
 }
