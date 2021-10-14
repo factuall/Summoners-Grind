@@ -1,5 +1,5 @@
 //sprite
-class Sprite{
+export class Sprite{
     constructor(url, width, height){
         this.url = url;
         this.width = width;
@@ -13,7 +13,7 @@ class Sprite{
     }
 }
 
-class TextSprite{
+export class TextSprite{
     constructor(text, font, size, color){
         this.text = text;
         this.font = font;
@@ -25,7 +25,7 @@ class TextSprite{
     }
 }
 
-class Camera{
+export class Camera{
     constructor(x, y, w, h){
         this.x = x;
         this.y = y;
@@ -50,7 +50,7 @@ class Camera{
     }
 }
 
-class Animation{
+export class Animation{
     constructor(frames, delay, loop){
         this.currentFrame = 0;
         this.frames = frames;
@@ -85,7 +85,7 @@ class Animation{
     }
 } 
 
-class AnimationController{
+export class AnimationController{
     constructor(animations, currentAnimation){
         this.animations = animations; 
         this.currentAnimation = currentAnimation;
@@ -107,7 +107,7 @@ class AnimationController{
     }
 }
 
-function getScreenWidth() {
+export function getScreenWidth() {
     return Math.max(
       document.body.scrollWidth,
       document.documentElement.scrollWidth,
@@ -117,7 +117,7 @@ function getScreenWidth() {
     );
   }
   
-function getScreenHeight() {
+export function getScreenHeight() {
     return Math.max(
         document.body.scrollHeight,
         document.documentElement.scrollHeight,

@@ -34,7 +34,7 @@ class Keybind{
 
 
 
-var controls = [];
+export var controls = [];
 controls.push(new Keybind("First Skill", "KeyQ", "SkillQ"));
 controls.push(new Keybind("Second Skill", "KeyW", "SkillW"));
 controls.push(new Keybind("Third Skill", "KeyE", "SkillE"));

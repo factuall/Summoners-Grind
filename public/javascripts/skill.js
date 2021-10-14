@@ -1,4 +1,6 @@
-class Skill{
+import { controls } from './keybinding.js'
+
+export class Skill{
     constructor(keybind, keybindNumber, cooldown){
         this.keybind = keybind;
         this.keybindNumber = keybindNumber;

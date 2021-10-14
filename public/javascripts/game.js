@@ -1,3 +1,10 @@
+import * as mathhelper from './math-helper.js';
+import './keybinding.js';
+import { Skill } from './skill.js';
+import { getScreenWidth, getScreenHeight, Camera, Sprite } from './graphics.js';
+import './sounds.js';
+import { Entity, updateObjectList, Player, Enemy, updateCursor, dTime, Trash } from './objects.js';
+
 //canvas setup
 const canvas = document.getElementById('GameScreen');
 const ctx = canvas.getContext('2d');
@@ -6,17 +13,14 @@ canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
 var objects = [];
 
-//gui
-const HTMLBEAK = "<br/>"
-const HPBar = document.getElementById('HealthBar');
-const MPBar = document.getElementById('ManaBar');
-MPBar.style.backgroundColor = "rgb(75,75,255)";
 
-const SkillsGUI = document.getElementsByClassName('Skill');
-SkillsGUI[0].style.backgroundImage = "url('img/skillQ.png')"
-SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
-SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
-SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
+document.addEventListener('drawObject', obj =>{
+    drawObject(obj.detail.x, obj.detail.y, obj.detail.w, obj.detail.h, obj.detail.drawContent);
+});
+
+document.addEventListener('pushObject', obj =>{
+    pushObject(obj.detail);
+});
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
@@ -45,6 +49,10 @@ const mouse = {
     click: false
 }
 
+function pushObject(obj){
+    objects.push(obj);
+    updateObjectList(objects);
+}
 
 function drawRect(x, y, w, h, c){
     ctx.fillStyle = c;
@@ -99,15 +107,16 @@ var trawusia = new Entity();
 trawusia.w = 800;
 trawusia.h = 600;
 trawusia.drawContent = new Sprite("/img/trawa.png", 800, 600);
-objects.push(trawusia);
+pushObject(trawusia);
 var player = new Player();
 player.health = player.maxHealth;
-objects.push(player);
+pushObject(player);
 var cursor = new Entity();
 cursor.w = 10;
 cursor.h = 10;
 cursor.c = "rgba(225,225,225,0.4)";
-objects.push(cursor);
+pushObject(cursor);
+updateCursor(cursor);
 canvas.addEventListener('mousedown', function(event){
     if(event.button === 0){
 
@@ -120,7 +129,7 @@ canvas.addEventListener('mousedown', function(event){
         pointer.setCentralPosition(mouse.x, mouse.y);
         let dontMoveCursor = false;
         objects.forEach(object => {
-            if(CollisionDetection(object, pointer)){
+            if(mathhelper.CollisionDetection(object, pointer)){
                 if(player.tryTarget(object)){
                     dontMoveCursor = true;
                 }
@@ -138,17 +147,19 @@ canvas.addEventListener('mousedown', function(event){
     }
 });
 
-objects.push(new Enemy());
+pushObject(new Enemy());
 var eeenemy = new Enemy();
 eeenemy.x = 600;
 eeenemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
 //eeenemy.combatType = "melee";
-objects.push(eeenemy);
+pushObject(eeenemy);
 
 function update(timestamp){
     requestAnimationFrame(update);
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
+    dTime(deltaTime);
     lastTimestamp = timestamp;
+    //updateCursor(objects);
     objects.forEach(element => {
         element.updateObject();
         if(element.entityType == "CombatEntity"){

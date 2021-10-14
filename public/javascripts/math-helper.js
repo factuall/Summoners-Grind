@@ -1,4 +1,4 @@
-function CollisionDetection(colA, colB){
+export function CollisionDetection(colA, colB){
     if (colA.x < colB.x + colB.w &&
         colA.x + colA.w > colB.x &&
         colA.y < colB.y + colB.h &&
@@ -11,7 +11,7 @@ function CollisionDetection(colA, colB){
 /////////////////////////////////////////
 //vector normalizing by Max Maximilian
 /////////////////////////////////////////
-var Vector = function(x,y) {
+export var Vector = function(x,y) {
     this.x = x;
     this.y = y;
     }     
@@ -21,7 +21,7 @@ this.x = this.x/length; //assigning new value to x (dividing x by length of the 
 this.y= this.y/length; //assigning new value to y
 }
 
-function GetFacingVector(origin, destination){
+export function GetFacingVector(origin, destination){
     let distX = origin.x - destination.x;
     let distY = origin.y - destination.y;
     let facingVector = new Vector(distX, distY);
@@ -29,7 +29,7 @@ function GetFacingVector(origin, destination){
     return(facingVector);
 }
 
-function GetFacingVectorC(origin, destination){
+export function GetFacingVectorC(origin, destination){
     let distX = origin.x - destination.ox;
     let distY = origin.y - destination.oy;
     let facingVector = new Vector(distX, distY);
@@ -37,7 +37,7 @@ function GetFacingVectorC(origin, destination){
     return(facingVector);
 }
 
-function GetFacingVectorCC(origin, destination){
+export function GetFacingVectorCC(origin, destination){
     let distX = origin.ox - destination.ox;
     let distY = origin.oy - destination.oy;
     let facingVector = new Vector(distX, distY);
@@ -45,19 +45,19 @@ function GetFacingVectorCC(origin, destination){
     return(facingVector);
 }
 
-function GetXYDistanceBetweenObjects(origin, destination){
+export function GetXYDistanceBetweenObjects(origin, destination){
     let distX = origin.x - destination.x;
     let distY = origin.y - destination.y;
     return({distX, distY});
 }
 
-function GetXYDistanceBetweenObjectsCC(origin, destination){
+export function GetXYDistanceBetweenObjectsCC(origin, destination){
     let distX = origin.ox - destination.ox;
     let distY = origin.oy - destination.oy;
     return({distX, distY});
 }
 
-function GetDistanceBetweenObjects(origin, destination){
+export function GetDistanceBetweenObjects(origin, destination){
     let distance = GetXYDistanceBetweenObjects(origin, destination);
     return(Math.sqrt(
         (Math.abs(distance.distX) * Math.abs(distance.distX)) + 
@@ -65,7 +65,7 @@ function GetDistanceBetweenObjects(origin, destination){
         ));
 }
 
-function GetDistanceBetweenObjectsCC(origin, destination){
+export function GetDistanceBetweenObjectsCC(origin, destination){
     let distance = GetXYDistanceBetweenObjectsCC(origin, destination);
     return(Math.sqrt(
         (Math.abs(distance.distX) * Math.abs(distance.distX)) + 

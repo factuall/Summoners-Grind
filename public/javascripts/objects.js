@@ -1,4 +1,51 @@
-class Entity{
+import * as mathhelper from './math-helper.js';
+import { importAudio } from './sounds.js';
+import { Sprite, TextSprite } from './graphics.js';
+import { Skill } from './skill.js';
+
+//gui
+const HTMLBEAK = "<br/>"
+const HPBar = document.getElementById('HealthBar');
+const MPBar = document.getElementById('ManaBar');
+MPBar.style.backgroundColor = "rgb(75,75,255)";
+const SkillsGUI = document.getElementsByClassName('Skill');
+SkillsGUI[0].style.backgroundImage = "url('img/skillQ.png')"
+SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
+SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
+SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
+
+var objects = [];
+
+var cursor = {};
+
+export function updateCursor(c){
+    cursor = c;
+}
+
+export function updateObjectList(objs){
+    objects = objs;
+}
+
+var deltaTime = 0;
+export function dTime(d){
+    deltaTime = d;
+}
+
+var eventObj;
+var drawObjectEvent = new CustomEvent('drawObject', eventObj);
+function drawObject(objX, objY, objW, objH, objDrawContent){
+    eventObj =  {
+        x: objX,
+        y: objY,
+        w: objW,
+        h: objH,
+        drawContent: objDrawContent
+    };
+    drawObjectEvent = new CustomEvent('drawObject', {detail: eventObj});
+    document.dispatchEvent(drawObjectEvent);
+}
+
+export class Entity{
     constructor(){
         this.index = objects.length;
         this.entityType = "Entity";
@@ -41,11 +88,10 @@ class Entity{
     }
 
     updateObject(){
-        
     }
 }
 
-class Trash extends Entity{
+export class Trash extends Entity{
     constructor(){
         super();
         this.entityType = "TrashEntity";
@@ -55,7 +101,7 @@ class Trash extends Entity{
     }
 }
 
-class CombatEntity extends Entity{
+export class CombatEntity extends Entity{
     constructor(){
         super();
         this.entityType = "CombatEntity";
@@ -96,7 +142,10 @@ class CombatEntity extends Entity{
                 if(this.combatType == "melee") {
                     objects[this.target].dealDamage(this.attackDamage);
                 }else{
-                    objects.push(new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage));
+                    let gowno = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage);
+                    let fastevent = new CustomEvent('pushObject', {detail: gowno});
+                    document.dispatchEvent(fastevent);
+                    //objects.push(new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage));
                 }
                 this.attackPreDelay = 0;
                 this.lastAttack = 0;
@@ -114,20 +163,20 @@ class CombatEntity extends Entity{
             }
             let collided = false;
             objects.forEach(element => {
-                if(CollisionDetection(this,element) && element!=this && cursor != element){
+                if(mathhelper.CollisionDetection(this,element) && element!=this && cursor != element){
                     if(element.name == this.target.name) collided = true;
                     if(element.entityType == "CombatEntity" && !collided){
-                        let destination = GetFacingVector(this, element);
+                        let destination = mathhelper.GetFacingVector(this, element);
                         this.move(destination.x*deltaTime,destination.y*deltaTime);
                     }
                 }
     
             });
-            if(!CollisionDetection(this,objects[this.target])){
-                if(GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
+            if(!mathhelper.CollisionDetection(this,objects[this.target])){
+                if(mathhelper.GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
                     this.tryToAttack();
                 }else{
-                    let destination = GetFacingVector(this, objects[this.target]);
+                    let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
                 }
             }else if(this.combatType == "melee"){
@@ -142,7 +191,7 @@ class CombatEntity extends Entity{
     }
 }
 
-class Player extends CombatEntity{
+export class Player extends CombatEntity{
     constructor(){
         super();
         this.name = "Player";
@@ -163,9 +212,9 @@ class Player extends CombatEntity{
 
     updateObject(){
         if(this.state == "move"){
-            this.inPosition = (CollisionDetection(this, cursor));
+            this.inPosition = (mathhelper.CollisionDetection(this, cursor));
             if(!this.inPosition){
-                let destination = GetFacingVectorCC(this, cursor);
+                let destination = mathhelper.GetFacingVectorCC(this, cursor);
                 this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
             }
             this.skills.forEach(playerSkill => {
@@ -222,7 +271,7 @@ class Player extends CombatEntity{
     }
 }
 
-class Enemy extends CombatEntity{
+export class Enemy extends CombatEntity{
     constructor(){
         super();
         this.x = 400;
@@ -249,7 +298,7 @@ class Enemy extends CombatEntity{
                 let closestDist = Number.MAX_SAFE_INTEGER;
                 objects.forEach(element => {
                     if(element.name == "Player" || element.name == "Ally"){
-                        let distance = GetDistanceBetweenObjects(this, element);
+                        let distance = mathhelper.GetDistanceBetweenObjects(this, element);
                         if(distance < closestDist){
                             closestDist = distance;
                             closest = element.index;
@@ -267,7 +316,7 @@ class Enemy extends CombatEntity{
 }
 
 var SPELL_ICE = importAudio('/sounds/spell_ice.wav');
-class Projectile extends Entity{
+export class Projectile extends Entity{
     constructor(source, target, speed, damage){
         super();
         this.source = source;
@@ -281,21 +330,21 @@ class Projectile extends Entity{
         this.updateCetralPosition();
         this.drawContent = "#ffff33";
         this.name = "Projectile";
-        tempAudioSrc('/sounds/spell_ice.wav');
+        //tempAudioSrc('/sounds/spell_ice.wav');
     }
     
     updateObject(){
-        let destination = GetFacingVectorC(this, this.target);
+        let destination = mathhelper.GetFacingVectorC(this, this.target);
         this.move(-destination.x*deltaTime*this.speed, -destination.y*deltaTime*this.speed);
     
-        if(CollisionDetection(this,this.target)){
+        if(mathhelper.CollisionDetection(this,this.target)){
             this.target.dealDamage(this.damage);
             objects[this.index] = new Trash();
         }
     }
 }
 
-class CombatEntityInfo extends Entity{
+export class CombatEntityInfo extends Entity{
     constructor(owner){
         super();
         this.h = 8;
