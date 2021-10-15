@@ -57,7 +57,6 @@ export function setUpCamera(w, h){
     camera.height = h;
 }
 
-
 export class Animation{
     constructor(frames, delay, loop){
         this.currentFrame = 0;
@@ -115,6 +114,8 @@ export class AnimationController{
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+
 export function getScreenWidth() {
     return Math.max(
       document.body.scrollWidth,
@@ -140,9 +141,12 @@ export const ctx = canvas.getContext('2d');
 canvas.width = getScreenWidth();
 canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
+export let zoom = 0.7;
 
 setUpCamera(canvas.width, canvas.height);
-let lockcam = false;
+let lockcam = true;
+
+document.addEventListener('LockCam', e => {lockcam = !lockcam});
 
 function drawRect(x, y, w, h, c){
     ctx.fillStyle = c;
@@ -181,7 +185,22 @@ function drawObject(x, y, w, h, content){
     }
 }
 
+let prevZoom = zoom;
+
 export function render(objects){
+    let player = objects.find(e => e.name == "Player");
+    canvas.width = getScreenWidth()*zoom;
+    canvas.height = getScreenHeight()*zoom;
+    setUpCamera(canvas.width, canvas.height);
+    if(lockcam){
+        camera.x = player.x - (camera.width / 2) + (player.w / 2);
+        camera.y = player.y - (camera.height / 2) + (player.h / 2); 
+    }else if(prevZoom != zoom){
+        let prevSW = getScreenWidth()*prevZoom;
+        let prevSH = getScreenHeight()*prevZoom;
+        camera.x += (prevSW - canvas.width) / 2;
+        camera.y += (prevSH - canvas.height) / 2;
+    }
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
         let objInfo = object.renderObject();
@@ -193,8 +212,27 @@ export function render(objects){
             drawObject(objInfo.x, objInfo.y, objInfo.w, objInfo.h, objInfo.drawContent);
         }
     });
-    if(lockcam){
-        camera.x = player.x - (camera.width / 2) + (player.w / 2);
-        camera.y = player.y - (camera.height / 2) + (player.h / 2); 
-    }
+    prevZoom = zoom;
 }
+
+function shiftZoom(value){
+    zoom += value
+    if(zoom < 0.3) zoom = 0.3;
+    if(zoom > 1) zoom = 1;
+}
+
+document.addEventListener("ZoomIn", () =>{
+    shiftZoom(-0.1);
+});
+
+document.addEventListener("ZoomOut", () =>{
+    shiftZoom(0.1);
+});
+
+document.addEventListener("MWheelUp", () =>{
+    shiftZoom(0.05);
+});
+
+document.addEventListener("MWheelDown", () =>{
+    shiftZoom(-0.05);
+});

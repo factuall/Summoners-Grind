@@ -4,12 +4,12 @@ import * as mathhelper from "/js/mathhelper.js";
 import { objects } from "/js/wrapper.js";
 
 export class Enemy extends CombatEntity{
-    constructor(index){
+    constructor(isRange, index){
         super(index);
+        this.isRange = isRange;
         this.x = 400;
         this.y = 400;
         this.name = "Enemy";
-        this.enemyname = "Range"
         //stats
         this.health = 60;
         this.maxHealth = 60;
@@ -21,7 +21,8 @@ export class Enemy extends CombatEntity{
         this.attackDamage = 20;
         this.attackSpeed = 8;
         //sprite
-        this.drawContent = new graphics.Sprite("/img/lucznik.png", 50, 50);
+        this.drawContent = (this.isRange) ? new graphics.Sprite("/img/lucznik.png", 50, 50) :
+                                            new graphics.Sprite("/img/miecznik.png", 50, 50);
     }
     updateObject(deltaTime){
         if(this.health > 0){

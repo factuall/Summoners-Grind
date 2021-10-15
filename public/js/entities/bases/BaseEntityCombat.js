@@ -18,7 +18,7 @@ export class CombatEntity extends Entity{
         //combat
         this.target = "None"
         this.range = 200;
-        this.combatType = "range";
+        this.isRange = false;
         this.attackDamage = 20;
         this.attackSpeed = 20;
         this.lastAttack = 0;
@@ -76,13 +76,13 @@ export class CombatEntity extends Entity{
     
             });
             if(!mathhelper.CollisionDetection(this,objects[this.target])){
-                if(mathhelper.GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.combatType == "range"){
+                if(mathhelper.GetDistanceBetweenObjects(this,objects[this.target]) < this.range && this.isRange){
                     this.tryToAttack(deltaTime, true);
                 }else{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
                 }
-            }else if(this.combatType == "melee"){
+            }else if(!this.isRange){
                 this.tryToAttack(deltaTime, false);
             }
         }

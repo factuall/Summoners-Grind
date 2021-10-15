@@ -65,4 +65,6 @@ function allControlsHere(){  // options label // keycode // event name
     controls.push(new Keybind("Third Skill", "KeyE", "SkillE"));
     controls.push(new Keybind("Ultimate Skill", "KeyR", "SkillR"));
     controls.push(new Keybind("Lock/Unlock camera", "KeyY", "LockCam"));
+    controls.push(new Keybind("Zoom out", "Minus", "ZoomOut"));
+    controls.push(new Keybind("Zoom in", "Equal", "ZoomIn"));
 }

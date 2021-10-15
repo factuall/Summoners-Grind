@@ -59,12 +59,12 @@ function start() {
     pushObject(cursor);
     mouse.setCursor(cursor);
     mouse.canvasReady(canvas);
+    mouse.addEListener();
 
-    pushObject(new Enemy(objects.length));
+    pushObject(new Enemy(false, objects.length));
 
-    let secondEnemy = new Enemy(objects.length);
+    let secondEnemy = new Enemy(true, objects.length);
     secondEnemy.x = 600;
-    secondEnemy.drawContent = new Sprite("/img/miecznik.png", 50, 50);
     secondEnemy.combatType = "melee";
     pushObject(secondEnemy);
 
@@ -72,7 +72,6 @@ function start() {
     document.addEventListener('SkillW', e => {player.playerInput(e)});
     document.addEventListener('SkillE', e => {player.playerInput(e)});
     document.addEventListener('SkillR', e => {player.playerInput(e)});
-    document.addEventListener('LockCam', e => {lockcam = !lockcam});
 }
 
 start();
