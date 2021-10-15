@@ -1,10 +1,10 @@
 import { Entity } from "/js/entities/bases/Entity.js";
-import { CombatEntityInfo } from "/js/entities/EntityCombatInfo.js";
+import { CombatEntityInfo } from "/js/entities/CombatInfo.js";
 import { objects, pushObject } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { cursor } from "/js/mouse.js";
-import { Projectile } from "/js/entities/EntityProjectile.js";
-import { Hitbox } from "/js/entities/EntityHitbox.js";
+import { Projectile } from "/js/entities/Projectile.js";
+import { Hitbox } from "/js/entities/Hitbx.js";
 
 export class CombatEntity extends Entity{
     constructor(){

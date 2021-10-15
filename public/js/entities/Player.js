@@ -1,4 +1,4 @@
-import { CombatEntity } from './bases/BaseEntityCombat.js';
+import { CombatEntity } from './bases/CombatEntity.js';
 import * as graphics from "/js/graphics.js";
 import { cursor } from "/js/mouse.js";
 import { controls } from "/js/keybinding.js";
@@ -9,10 +9,10 @@ const HPBar = document.getElementById('HealthBar');
 const MPBar = document.getElementById('ManaBar');
 MPBar.style.backgroundColor = "rgb(75,75,255)";
 const SkillsGUI = document.getElementsByClassName('Skill');
-SkillsGUI[0].style.backgroundImage = "url('img/skillQ.png')"
-SkillsGUI[1].style.backgroundImage = "url('img/skillW.png')"
-SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
-SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
+SkillsGUI[0].style.backgroundImage = "url('img/skills/44.png')"
+SkillsGUI[1].style.backgroundImage = "url('img/skills/23.png')"
+SkillsGUI[2].style.backgroundImage = "url('img/skills/10.png')"
+SkillsGUI[3].style.backgroundImage = "url('img/skills/4.png')"
 
 class Skill{
     constructor(keybind, keybindNumber, cooldown, skillFunction){

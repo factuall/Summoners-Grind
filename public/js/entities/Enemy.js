@@ -1,4 +1,4 @@
-import { CombatEntity } from './bases/BaseEntityCombat.js';
+import { CombatEntity } from './bases/CombatEntity.js';
 import * as graphics from "/js/graphics.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { objects } from "/js/gamemodule.js";

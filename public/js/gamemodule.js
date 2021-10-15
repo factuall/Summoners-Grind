@@ -1,11 +1,10 @@
 import './keybinding.js';
 import { camUpdate, Sprite, render, canvas } from './graphics.js';
 import { Entity } from "/js/entities/bases/Entity.js";
-import { Player } from "/js/entities/EntityPlayer.js";
-import { Enemy } from "/js/entities/EntityEnemy.js";
+import { Player } from "/js/entities/Player.js";
+import { Enemy } from "/js/entities/Enemy.js";
 import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
-import * as wrapper from "/js/wrapper.js";
 import {menuHalt} from "/js/managers/menumanager.js";
 
 //update and render setup
@@ -58,7 +57,6 @@ function update(timestamp){
             }
         }
     });
-    wrapper.syncObjects(objects);
 }
 
 function start() {

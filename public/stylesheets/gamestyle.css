@@ -86,7 +86,7 @@ body{
     padding: 5px;
     font-size: small;
     filter: brightness(100%);
-    background-repeat: no-repeat;
+    background-size: cover;
 }
 .Skill:hover{
     outline: 2px solid black;

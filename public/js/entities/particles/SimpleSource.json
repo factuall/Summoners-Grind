@@ -1,0 +1,14 @@
+{
+    "duration": 1,
+    "distribution": {
+        "base": 1,
+        "keyframes": []
+    },
+    "startVelocity": {
+        
+    },
+    "direction": {
+        "startingAngle": 1,
+        "endingAngle": 1
+    }
+}

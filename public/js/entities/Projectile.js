@@ -1,5 +1,6 @@
 import { Entity } from './bases/Entity.js';
 import * as mathhelper from "/js/mathhelper.js";
+import * as graphics from "/js/graphics.js";
 import { objects } from "/js/gamemodule.js";
 import { Trash } from "/js/entities/Trash.js";
 
@@ -16,7 +17,7 @@ export class Projectile extends Entity{
         this.x = source.ox - (this.w / 2);
         this.y = source.oy - (this.h / 2);
         this.updateCetralPosition();
-        this.drawContent = "#ffff33";
+        this.drawContent = new graphics.Sprite('/img/effects/spell1.png');
         this.name = "Projectile";
     }
     
