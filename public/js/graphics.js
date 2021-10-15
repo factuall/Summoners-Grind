@@ -6,11 +6,28 @@ export class Sprite{
         this.width = width;
         this.height = height;
         this.image = new Image();
-        this.image.src = this.url; 
+        this.image.src = this.url;
         this.ready = false;
         this.image.onload = function() {
             this.ready = true;
         };
+    }
+}
+
+export class SpriteSheet{
+    constructor(sprite, rows, columns, frameWidth, frameHeight){
+        this.sprite = sprite;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+        this.rows = rows;
+        this.columns = columns;
+
+        this.currentRow = 0;
+        this.currentColumn = 0;
+    }
+    setOffset(x, y){
+        this.currentColumn = x;
+        this.currentRow = y;
     }
 }
 
@@ -104,7 +121,7 @@ export class AnimationController{
     }
     getCurrentSprite(){
         return this.sprite;
-    }y
+    }
     controllerUpdate(deltaTime){
         this.animations[this.currentAnimation].updateAnimation(deltaTime);
         this.sprite = this.animations[this.currentAnimation].getCurrentSprite();
@@ -158,6 +175,10 @@ function drawImage(x, y, w, h, s){
     ctx.drawImage(s, x, y, w, h);
 }
 
+function drawSpriteFromSheet(x, y, w, h, r, c, s){
+    ctx.drawImage(s, c*w, r*h, w, h, x, y, w, h);
+}
+
 function drawText(text, style, color, x, y){
     ctx.font = style;
     ctx.fillStyle = color;
@@ -181,6 +202,12 @@ function drawObject(x, y, w, h, content){
                 break;
             case "String":
                 drawRect(objViewPos.objViewX, objViewPos.objViewY, w, h, content);
+                break;
+            case "SpriteSheet":
+                drawSpriteFromSheet(objViewPos.objViewX, objViewPos.objViewY,
+                                    content.frameWidth, content.frameHeight,
+                                    content.currentRow, content.currentColumn,
+                                    content.sprite.image)
                 break;
         }
     }

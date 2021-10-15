@@ -34,8 +34,6 @@ export class Player extends CombatEntity{
         super();
         this.isRange = true;
         this.name = "Player";
-        this.w = 64;
-        this.h = 64;
         this.inPosition = true;
         this.underAttack = true;
         this.state = "move";
@@ -45,13 +43,9 @@ export class Player extends CombatEntity{
         this.skills.push(new Skill("SkillW", 1, 200, ()=>{}));
         this.skills.push(new Skill("SkillE", 2, 300, ()=>{}));
         this.skills.push(new Skill("SkillR", 3, 400, ()=>{}));
-        //sprite
-        this.animationFrame = 0;
-        this.delayCounter = 0;
-        this.drawContent = new graphics.SpriteSheet(
-            new graphics.Sprite("/img/character/BODY_male.png", 0, 0),
-            3, 8, 64, 64
-        );
+        //sprites
+        this.animController = this.loadSprites();
+        this.drawContent = "#333333";
         //camera flag
         this.cameraFollow = true;
         document.addEventListener("cursorClick", e => {
@@ -60,14 +54,12 @@ export class Player extends CombatEntity{
     }
 
     updateObject(deltaTime){
+        
         if(this.state == "move"){
             this.inPosition = (mathhelper.CollisionDetection(this, cursor));
             if(!this.inPosition){
                 let destination = mathhelper.GetFacingVectorCC(this, cursor);
                 this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
-                this.progressWalkAnimation(deltaTime);
-            }else{
-                this.animationFrame = 0;
             }
             this.skills.forEach(playerSkill => {
                 playerSkill.clock += deltaTime;
@@ -79,30 +71,15 @@ export class Player extends CombatEntity{
                 cursor.oy = this.oy;
             }
         }
-        let xy = mathhelper.GetFacingVectorCC(this, cursor);
-        if(Math.abs(xy.x) > Math.abs(xy.y)){
-            if(xy.x > 0){
-                this.drawContent.setOffset(this.animationFrame, 1);
-            }else{
-                this.drawContent.setOffset(this.animationFrame, 3);
-            }
-        }else{
-            if(xy.y > 0){
-                this.drawContent.setOffset(this.animationFrame, 0);
-            }else{
-                this.drawContent.setOffset(this.animationFrame, 2);
-            }
-        }
-        super.updateObject(deltaTime);
-    }
+        if(this.animController != undefined){
 
-    progressWalkAnimation(deltaTime){
-        this.delayCounter += deltaTime;
-        if(this.delayCounter > 5){
-            this.delayCounter = 0;
-            this.animationFrame += 1;
-            if(this.animationFrame >= this.drawContent.columns) this.animationFrame = 0;
-        }
+        
+        console.log(this.animController);
+        let ctrl = this.animController;
+        ctrl.controllerUpdate(deltaTime);
+        //this.drawContent = animController.getCurrentSprite();
+        super.updateObject(deltaTime);
+        }   
     }
 
     renderObject(){
@@ -152,5 +129,70 @@ export class Player extends CombatEntity{
 
     updateCursor(c){
         cursor = c;
+    }
+
+    loadSprites(){
+        let output = [];
+
+        output.push(new graphics.Sprite("/img/character/tile000"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile001"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile002"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile003"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile004"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile005"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile006"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile007"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile008"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile009"+".png", 64, 64));
+
+        output.push(new graphics.Sprite("/img/character/tile010"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile011"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile012"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile013"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile014"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile015"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile016"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile017"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile018"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile019"+".png", 64, 64));
+
+        output.push(new graphics.Sprite("/img/character/tile020"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile021"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile022"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile023"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile024"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile025"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile026"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile027"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile028"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile029"+".png", 64, 64));
+
+        output.push(new graphics.Sprite("/img/character/tile030"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile031"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile032"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile033"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile034"+".png", 64, 64));
+        output.push(new graphics.Sprite("/img/character/tile035"+".png", 64, 64));
+        
+        let input = output;
+
+        let animLength = 9;
+        let anims = 4;
+        
+        let animations = [];
+        
+        let curAn = [];
+
+        for (let frames = 0; frames < (animLength)*anims; frames++) {
+            curAn.push(input[frames]);
+            if(frames == animLength - 1 || frames == (animLength * 2) - 1 || frames == (animLength * 3) - 1){
+                animations.push(new graphics.Animation(curAn, 5, true));
+                curAn = [];
+            }
+            
+        }
+        animations.push(new graphics.Animation(curAn, 5, true));
+        let controller = new graphics.AnimationController(animations, animations[0]);
+        return controller;
     }
 }

@@ -10,6 +10,7 @@ export class CombatEntity extends Entity{
     constructor(){
         super();
         this.entityType = "CombatEntity";
+        this.inPosition = false;
         //stats
         this.maxHealth = 1200;
         this.maxMana = 200;
@@ -72,6 +73,7 @@ export class CombatEntity extends Entity{
                     if(element.entityType == "CombatEntity" && !collided){
                         let destination = mathhelper.GetFacingVector(this, element);
                         this.move(destination.x*deltaTime,destination.y*deltaTime);
+                        this.progressWalkAnimation(deltaTime);
                     }
                 }
     
@@ -82,11 +84,16 @@ export class CombatEntity extends Entity{
                 }else{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
+                    this.progressWalkAnimation(deltaTime);
                 }
             }else if(!this.isRange){
                 this.tryToAttack(deltaTime, false);
             }
         }
+    }
+
+    progressWalkAnimation(deltaTime){
+
     }
 
     updateObject(deltaTime){
