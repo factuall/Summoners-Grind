@@ -4,7 +4,6 @@ import { cursor } from "/js/mouse.js";
 import { controls } from "/js/keybinding.js";
 import * as mathhelper from "/js/mathhelper.js";
 
-
 const HTMLBEAK = "<br/>"
 const HPBar = document.getElementById('HealthBar');
 const MPBar = document.getElementById('ManaBar');
@@ -16,8 +15,9 @@ SkillsGUI[2].style.backgroundImage = "url('img/skillE.png')"
 SkillsGUI[3].style.backgroundImage = "url('img/skillR.png')"
 
 class Skill{
-    constructor(keybind, keybindNumber, cooldown){
+    constructor(keybind, keybindNumber, cooldown, skillFunction){
         this.keybind = keybind;
+        this.skillFunction = skillFunction;
         this.keybindNumber = keybindNumber;
         this.label = controls[keybindNumber].displayKey;
         this.cooldown = cooldown;
@@ -39,10 +39,10 @@ export class Player extends CombatEntity{
         this.state = "move";
         //skills
         this.skills = [];
-        this.skills.push(new Skill("SkillQ", 0, 60));
-        this.skills.push(new Skill("SkillW", 1, 200));
-        this.skills.push(new Skill("SkillE", 2, 300));
-        this.skills.push(new Skill("SkillR", 3, 400));
+        this.skills.push(new Skill("SkillQ", 0, 60, ()=>{}));
+        this.skills.push(new Skill("SkillW", 1, 200, ()=>{}));
+        this.skills.push(new Skill("SkillE", 2, 300, ()=>{}));
+        this.skills.push(new Skill("SkillR", 3, 400, ()=>{}));
         //sprite
         this.drawContent = new graphics.Sprite("/img/hipek.png", 50, 50);
         //camera flag
@@ -53,6 +53,7 @@ export class Player extends CombatEntity{
     }
 
     updateObject(deltaTime){
+        
         if(this.state == "move"){
             this.inPosition = (mathhelper.CollisionDetection(this, cursor));
             if(!this.inPosition){
@@ -112,6 +113,7 @@ export class Player extends CombatEntity{
         this.skills.forEach(playerSkill => {
             if(e.type == playerSkill.keybind && playerSkill.clock > playerSkill.cooldown){
                 playerSkill.clock = 0;
+                openMenu();
             }
         });
     }

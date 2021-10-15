@@ -6,12 +6,12 @@ import { Enemy } from "/js/entities/EntityEnemy.js";
 import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
 import * as wrapper from "/js/wrapper.js";
-import { Hitbox } from '/js/entities/EntityHitbox.js';
+import {menuHalt} from "/js/managers/menumanager.js";
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
 let deltaTime = 0;
-let lastTimestamp = 0;
+export let lastTimestamp = 0;
 
 export let objects = [];
 document.addEventListener("pushObject", objEvent => {
@@ -19,6 +19,7 @@ document.addEventListener("pushObject", objEvent => {
 });
 
 export function pushObject(obj){
+    
     if(Array.isArray(obj)){
         obj.forEach(e => {
             e.index = objects.length;
@@ -34,7 +35,14 @@ let renderInterval = window.setInterval(function(){
     render(objects);
 }, 3);
 
+
+export function resumeUpdate(timestamp){
+    lastTimestamp = timestamp;
+    requestAnimationFrame(update);
+}
+
 function update(timestamp){
+    if(menuHalt) return;
     requestAnimationFrame(update);
     camUpdate(deltaTime);
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;

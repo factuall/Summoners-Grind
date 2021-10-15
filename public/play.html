@@ -5,14 +5,9 @@
         <meta name="viewport" content="width=device-width, inital-scale=1.0">
         <title>Summoners Grind</title>
         <link rel="stylesheet" href="/stylesheets/gamestyle.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
-        <div id="ControlsGui">
-            <span>></span>
-            Controls
-            <div id="ControlsGuiContent">
-            </div>
-        </div>
         <div id="PlayerGui">    
             <div id="PlayerImage"></div>
             <div id="PlayerUI">
@@ -38,7 +33,23 @@
             </div>
         </div>
         <canvas id="GameScreen"></canvas>
+        <div id="fadeIn"></div>
+        <div id="ControlsGui">
+            <span>></span>
+            Controls
+            <div id="ControlsGuiContent">
+            </div>
+        </div>
+        <div id="GameMenu">
+            <div id="MenuLayout">
+                <h1>Summoners Grind</h1>
+                <div class="MenuButton" id="resumeButton">RESUME</div>
+                <div class="MenuButton" id="openControlsButton">CONTROLS</div>
+                <div class="MenuButton">QUIT</div>
+            </div>
+        </div>
         <script src="js/gamemodule.js" type="module"></script>
+        
     </body>
 </html>
 

@@ -2,6 +2,7 @@ import { Entity } from "/js/entities/bases/Entity.js";
 import { objects } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { camera, getScreenWidth, getScreenHeight, zoom } from "/js/graphics.js";
+import {menuHalt} from "/js/managers/menumanager.js";
 
 export let canvas;
 export let canvasPosition;
@@ -31,11 +32,13 @@ let mwheelup = new Event("MWheelUp");
 let mwheeldown = new Event("MWheelDown");
 export function addEListener(){
     document.addEventListener("wheel", function (e) {
+        if(menuHalt) return false;
         document.dispatchEvent((e.deltaY > 0) ? mwheelup : mwheeldown);
         return false;
     }, true);
 
     canvas.addEventListener('mousedown', function(event){
+        if(menuHalt) return;
         if(event.button === 0){
     
         }else{
@@ -65,6 +68,7 @@ window.addEventListener('contextmenu', function (e) {
 }, false);
 
 function updateMousePosition(event){
+    if(menuHalt) return;
     var dot, eventDoc, doc, body, pageX, pageY;
 
     event = event || window.event; // IE-ism
