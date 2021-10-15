@@ -13,6 +13,11 @@ export const mouse = {
     click: false
 }
 
+export const mouseAbsolute = {
+    x: 0,
+    y: 0,
+}
+
 // sync cursor object with one defined in main module
 export function setCursor(crs){
     cursor = crs;
@@ -78,7 +83,11 @@ function updateMousePosition(event){
             (doc && doc.clientTop  || body && body.clientTop  || 0 );
     }
 
+    mouseAbsolute.x = event.pageX;
+    mouseAbsolute.y = event.pageY;
+
     mouse.x = event.pageX + camera.x;
     mouse.y = event.pageY + camera.y;
+
 }
 document.onmousemove = updateMousePosition;

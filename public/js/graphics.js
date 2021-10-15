@@ -1,3 +1,4 @@
+import { mouseAbsolute } from "/js/mouse.js";
 //sprite
 export class Sprite{
     constructor(url, width, height){
@@ -103,7 +104,7 @@ export class AnimationController{
     }
     getCurrentSprite(){
         return this.sprite;
-    }
+    }y
     controllerUpdate(deltaTime){
         this.animations[this.currentAnimation].updateAnimation(deltaTime);
         this.sprite = this.animations[this.currentAnimation].getCurrentSprite();
@@ -186,8 +187,18 @@ function drawObject(x, y, w, h, content){
 }
 
 let prevZoom = zoom;
+let camSpeed = 10;
+export function camUpdate(deltaTime){
+    if(!lockcam){
+        if(mouseAbsolute.x < 75) camera.x -= camSpeed * deltaTime;
+        if(mouseAbsolute.x > getScreenWidth() - 75) camera.x += camSpeed * deltaTime; 
+        if(mouseAbsolute.y < 75) camera.y -= camSpeed * deltaTime;
+        if(mouseAbsolute.y > getScreenHeight() - 75) camera.y += camSpeed * deltaTime; 
+    }
+}
 
 export function render(objects){
+    //pre-rendering
     let player = objects.find(e => e.name == "Player");
     canvas.width = getScreenWidth()*zoom;
     canvas.height = getScreenHeight()*zoom;
@@ -201,6 +212,8 @@ export function render(objects){
         camera.x += (prevSW - canvas.width) / 2;
         camera.y += (prevSH - canvas.height) / 2;
     }
+
+    //rendering
     drawRect(0,0,canvas.width,canvas.height, "#505050");
     objects.forEach(object => {
         let objInfo = object.renderObject();
@@ -212,6 +225,8 @@ export function render(objects){
             drawObject(objInfo.x, objInfo.y, objInfo.w, objInfo.h, objInfo.drawContent);
         }
     });
+
+    //post-rendering
     prevZoom = zoom;
 }
 

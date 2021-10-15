@@ -1,5 +1,5 @@
 import './keybinding.js';
-import { setUpCamera, Sprite, render, canvas } from './graphics.js';
+import { camUpdate, Sprite, render, canvas } from './graphics.js';
 import { Entity } from "/js/entities/bases/Entity.js";
 import { Player } from "/js/entities/EntityPlayer.js";
 import { Enemy } from "/js/entities/EntityEnemy.js";
@@ -28,6 +28,7 @@ let renderInterval = window.setInterval(function(){
 
 function update(timestamp){
     requestAnimationFrame(update);
+    camUpdate(deltaTime);
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
     lastTimestamp = timestamp;
     objects.forEach(element => {
