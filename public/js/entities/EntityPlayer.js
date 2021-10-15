@@ -30,8 +30,8 @@ class Skill{
 }
 
 export class Player extends CombatEntity{
-    constructor(index){
-        super(index);
+    constructor(){
+        super();
         this.isRange = true;
         this.name = "Player";
         this.inPosition = true;

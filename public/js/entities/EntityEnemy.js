@@ -1,11 +1,11 @@
 import { CombatEntity } from './bases/BaseEntityCombat.js';
 import * as graphics from "/js/graphics.js";
 import * as mathhelper from "/js/mathhelper.js";
-import { objects } from "/js/wrapper.js";
+import { objects } from "/js/gamemodule.js";
 
 export class Enemy extends CombatEntity{
-    constructor(isRange, index){
-        super(index);
+    constructor(isRange){
+        super();
         this.isRange = isRange;
         this.x = 400;
         this.y = 400;

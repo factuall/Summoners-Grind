@@ -1,6 +1,6 @@
 export class Entity{
-    constructor(index){
-        this.index = index;
+    constructor(){
+        this.index = 0;
         this.entityType = "Entity";
         this.name = "Object";
         this.x = 0; 
@@ -48,5 +48,9 @@ export class Entity{
 
     updateObject(deltaTime){
         
+    }
+
+    bundle(){
+        return this;
     }
 }

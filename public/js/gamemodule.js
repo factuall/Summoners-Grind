@@ -6,6 +6,7 @@ import { Enemy } from "/js/entities/EntityEnemy.js";
 import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
 import * as wrapper from "/js/wrapper.js";
+import { Hitbox } from '/js/entities/EntityHitbox.js';
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
@@ -17,9 +18,16 @@ document.addEventListener("pushObject", objEvent => {
     pushObject(objEvent.detail);
 });
 
-function pushObject(obj){
-    objects.push(obj);
-    wrapper.syncObjects(objects);
+export function pushObject(obj){
+    if(Array.isArray(obj)){
+        obj.forEach(e => {
+            e.index = objects.length;
+            objects.push(e);
+        });
+    }else{
+        obj.index = objects.length;
+        objects.push(obj);
+    }
 }
 
 let renderInterval = window.setInterval(function(){
@@ -35,7 +43,11 @@ function update(timestamp){
         if(element.entityType == "TrashEntity") return;
         element.updateObject(deltaTime);
         if(element.entityType == "CombatEntity"){
-            if(element.health <= 0) objects[element.index] = new Trash(); 
+            if(element.health <= 0) {
+                objects[element.index] = new Trash(); 
+                objects[element.index+1] = new Trash();
+
+            }
         }
     });
     wrapper.syncObjects(objects);
@@ -44,16 +56,16 @@ function update(timestamp){
 function start() {
     requestAnimationFrame(update);
 
-    let grassbg = new Entity(objects.length);
+    let grassbg = new Entity();
     grassbg.w = 800;
     grassbg.h = 600;
     grassbg.drawContent = new Sprite("/img/trawa.png", 800, 600);
     pushObject(grassbg);
 
-    let player = new Player(objects.length);
-    pushObject(player);
+    let player = new Player();
+    pushObject(player.bundle());
 
-    let cursor = new Entity(objects.length);
+    let cursor = new Entity();
     cursor.w = 10;
     cursor.h = 10;
     cursor.c = "rgba(225,225,225,0.4)";
@@ -62,12 +74,12 @@ function start() {
     mouse.canvasReady(canvas);
     mouse.addEListener();
 
-    pushObject(new Enemy(false, objects.length));
+    pushObject(new Enemy(false).bundle());
 
-    let secondEnemy = new Enemy(true, objects.length);
+    let secondEnemy = new Enemy(true);
     secondEnemy.x = 600;
     secondEnemy.combatType = "melee";
-    pushObject(secondEnemy);
+    pushObject(secondEnemy.bundle());
 
     document.addEventListener('SkillQ', e => {player.playerInput(e)});
     document.addEventListener('SkillW', e => {player.playerInput(e)});

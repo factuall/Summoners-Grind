@@ -1,5 +1,5 @@
 import { Entity } from "/js/entities/bases/Entity.js";
-import { objects } from "/js/wrapper.js";
+import { objects } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { camera, getScreenWidth, getScreenHeight, zoom } from "/js/graphics.js";
 
@@ -48,9 +48,11 @@ export function addEListener(){
             let clickedObjects = [];
             objects.forEach(e => {
                 if(mathhelper.CollisionDetection(pointer, e)){
-                    clickedObjects.push(e);
+                    if(e.name == "Hitbox") clickedObjects.push(e.owner);
+                    else clickedObjects.push(e);
                 }
             });
+            console.log(clickedObjects);
             let cursorClick = new CustomEvent('cursorClick', {detail: clickedObjects});
             document.dispatchEvent(cursorClick);
             cursor.setCentralPosition(mouse.x, mouse.y);

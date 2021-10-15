@@ -1,13 +1,14 @@
 import { Entity } from "/js/entities/bases/Entity.js";
 import { CombatEntityInfo } from "/js/entities/EntityCombatInfo.js";
-import { objects, pushObject } from "/js/wrapper.js";
+import { objects, pushObject } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { cursor } from "/js/mouse.js";
 import { Projectile } from "/js/entities/EntityProjectile.js";
+import { Hitbox } from "/js/entities/EntityHitbox.js";
 
 export class CombatEntity extends Entity{
-    constructor(index){
-        super(index);
+    constructor(){
+        super();
         this.entityType = "CombatEntity";
         //stats
         this.maxHealth = 1200;
@@ -27,11 +28,11 @@ export class CombatEntity extends Entity{
         this.projectileSpeed = 4;
         //hp bar
         this.EntityInfoDisplay = new CombatEntityInfo(this);
+        this.hitbox = new Hitbox(this);
     }
 
-    renderObject(){
-        super.renderObject();
-        this.EntityInfoDisplay.renderObject();
+    bundle(){
+        return [this, this.hitbox];
     }
 
     dealDamage(damage){
@@ -91,24 +92,30 @@ export class CombatEntity extends Entity{
     updateObject(deltaTime){
         this.lastAttack++;
         this.EntityInfoDisplay.updateObject(deltaTime);
+        //this.hitbox.updateObject(deltaTime);
     }
 
     renderObject(){
-        
+        let renderlist = [];
         if(Array.isArray(this.EntityInfoDisplay.renderObject())){
-            let renderlist = this.EntityInfoDisplay.renderObject();
-            renderlist.push({
-                x: this.x,
-                y: this.y,
-                w: this.w,
-                h: this.h,
-                drawContent: this.drawContent
-            });
-            return renderlist;
-        }else{
-            return super.renderObject();
-        } 
+            renderlist = this.EntityInfoDisplay.renderObject();
+        }
+        renderlist.push({
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            drawContent: this.drawContent
+        });
         
-        
+        /*renderlist.push({
+            x: this.hitbox.x,
+            y: this.hitbox.y,
+            w: this.hitbox.w,
+            h: this.hitbox.h,
+            drawContent: this.hitbox.drawContent
+        });*/
+
+        return renderlist;
     }
 }

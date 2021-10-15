@@ -1,12 +1,12 @@
 import { Entity } from './bases/Entity.js';
 import * as mathhelper from "/js/mathhelper.js";
-import { objects, syncObjects } from "/js/wrapper.js";
+import { objects } from "/js/gamemodule.js";
 import { Trash } from "/js/entities/Trash.js";
 
 export class Projectile extends Entity{
-    constructor(source, target, speed, damage, index){
+    constructor(source, target, speed, damage){
         super();
-        this.index = index;
+        this.index = 0;
         this.source = source;
         this.target = target;
         this.speed = speed;
@@ -23,13 +23,12 @@ export class Projectile extends Entity{
     updateObject(deltaTime){
         let destination = mathhelper.GetFacingVectorC(this, this.target);
         this.move(-destination.x*deltaTime*this.speed, -destination.y*deltaTime*this.speed);
-    
         if(mathhelper.CollisionDetection(this,this.target)){
+
             this.target.dealDamage(this.damage);
             this.entityType = "TrashEntity";
-            let objectsList = objects;
-            objectsList[this.index] = new Trash();
-            syncObjects(objectsList);
+            
+            objects[this.index] = new Trash();
         }
     }
 }
