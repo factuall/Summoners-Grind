@@ -50,7 +50,7 @@ export class Camera{
     }
 }
 
-export var camera = new Camera(0, 0, 800, 600);
+export let camera = new Camera(0, 0, 800, 600);
 
 export function setUpCamera(w, h){
     camera.width = w;
@@ -142,7 +142,7 @@ canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
 
 setUpCamera(canvas.width, canvas.height);
-var lockcam = false;
+let lockcam = false;
 
 function drawRect(x, y, w, h, c){
     ctx.fillStyle = c;

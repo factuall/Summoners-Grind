@@ -31,7 +31,7 @@ class Keybind{
     }
 }
 
-export var controls = [];
+export let controls = [];
 allControlsHere();
 
 document.addEventListener('keypress', e =>{
@@ -48,7 +48,7 @@ document.addEventListener('keypress', e =>{
     });
 });
 
-var ControlsGui = document.getElementById('ControlsGuiContent');
+let ControlsGui = document.getElementById('ControlsGuiContent');
 
 controls.forEach(k =>{
     ControlsGui.appendChild(k.guiOption);

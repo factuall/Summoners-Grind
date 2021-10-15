@@ -1,4 +1,4 @@
-var audioList = [];
+let audioList = [];
 
 // use this if sound wouldn't be playing more than
 // one playback at the same moment

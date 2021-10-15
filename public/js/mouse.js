@@ -3,9 +3,9 @@ import { objects } from "/js/wrapper.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { camera } from "/js/graphics.js";
 
-export var canvas;
-export var canvasPosition;
-export var cursor;
+export let canvas;
+export let canvasPosition;
+export let cursor;
 
 export const mouse = {
     x: 0,
