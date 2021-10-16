@@ -34,11 +34,12 @@ export class Player extends CombatEntity{
         super();
         this.isRange = true;
         this.name = "Player";
-        this.w = 64;
-        this.h = 64;
+        this.w = 80;
+        this.h = 80;
         this.inPosition = true;
         this.underAttack = true;
         this.state = "move";
+        this.attackSpeed = 30;
         //skills
         this.skills = [];
         this.skills.push(new Skill("SkillQ", 0, 60, ()=>{}));
@@ -46,13 +47,13 @@ export class Player extends CombatEntity{
         this.skills.push(new Skill("SkillE", 2, 300, ()=>{}));
         this.skills.push(new Skill("SkillR", 3, 400, ()=>{}));
         //sprite
-        this.animationFrame = 0;
-        this.delayCounter = 0;
-        this.drawContent = new graphics.SpriteSheet(
-            new graphics.Sprite("/img/character/BODY_male.png", 0, 0),
-            3, 8, 64, 64
-        );
-        //camera flag
+        let spriteImage = new graphics.Sprite("/img/character/BODY_male.png");
+        this.defaultSprites = new graphics.SpriteSheet(spriteImage, 4, 9, 64, 64);
+        this.drawContent = this.defaultSprites;
+
+        let spriteImageATK = new graphics.Sprite("/img/character/BODY_animation.png");
+        this.attackSprites = new graphics.SpriteSheet(spriteImageATK, 4, 9, 64, 64);
+
         this.cameraFollow = true;
         document.addEventListener("cursorClick", e => {
             this.tryTarget(e.detail);
@@ -61,13 +62,14 @@ export class Player extends CombatEntity{
 
     updateObject(deltaTime){
         if(this.state == "move"){
+            this.drawContent = this.defaultSprites;
             this.inPosition = (mathhelper.CollisionDetection(this, cursor));
             if(!this.inPosition){
                 let destination = mathhelper.GetFacingVectorCC(this, cursor);
-                this.move(-destination.x*4*deltaTime,-destination.y*4*deltaTime);
-                this.progressWalkAnimation(deltaTime);
+                this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
+                this.playing = true;
             }else{
-                this.animationFrame = 0;
+                this.playing = false;
             }
             this.skills.forEach(playerSkill => {
                 playerSkill.clock += deltaTime;
@@ -82,27 +84,23 @@ export class Player extends CombatEntity{
         let xy = mathhelper.GetFacingVectorCC(this, cursor);
         if(Math.abs(xy.x) > Math.abs(xy.y)){
             if(xy.x > 0){
-                this.drawContent.setOffset(this.animationFrame, 1);
+                this.drawContent.setOffset(this.currentFrame, 1);
             }else{
-                this.drawContent.setOffset(this.animationFrame, 3);
+                this.drawContent.setOffset(this.currentFrame, 3);
             }
         }else{
             if(xy.y > 0){
-                this.drawContent.setOffset(this.animationFrame, 0);
+                this.drawContent.setOffset(this.currentFrame, 0);
             }else{
-                this.drawContent.setOffset(this.animationFrame, 2);
+                this.drawContent.setOffset(this.currentFrame, 2);
             }
         }
+        this.playingAnimation(deltaTime);
         super.updateObject(deltaTime);
     }
 
-    progressWalkAnimation(deltaTime){
-        this.delayCounter += deltaTime;
-        if(this.delayCounter > 5){
-            this.delayCounter = 0;
-            this.animationFrame += 1;
-            if(this.animationFrame >= this.drawContent.columns) this.animationFrame = 0;
-        }
+    playingAnimation(deltaTime){
+        super.playingAnimation(deltaTime);
     }
 
     renderObject(){

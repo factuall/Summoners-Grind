@@ -2,9 +2,11 @@ import { Entity } from "/js/entities/bases/Entity.js";
 import { CombatEntityInfo } from "/js/entities/CombatInfo.js";
 import { objects, pushObject } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
+import * as graphics from "/js/graphics.js";
 import { cursor } from "/js/mouse.js";
 import { Projectile } from "/js/entities/Projectile.js";
 import { Hitbox } from "/js/entities/Hitbx.js";
+
 
 export class CombatEntity extends Entity{
     constructor(){
@@ -30,6 +32,18 @@ export class CombatEntity extends Entity{
         //hp bar
         this.EntityInfoDisplay = new CombatEntityInfo(this);
         this.hitbox = new Hitbox(this);
+
+        //spritesheet
+        let spriteImage = new graphics.Sprite("/img/character/BODY_male.png");
+        this.defaultSprites = new graphics.SpriteSheet(spriteImage, 4, 9, 64, 64);
+        this.attackSprites = this.defaultSprites;
+        this.drawContent = this.defaultSprites;
+
+        this.currentFrame = 0;
+        this.frameDelay = 5;
+        this.frameClock = 0;
+        this.playing = false;
+
     }
 
     bundle(){
@@ -43,8 +57,12 @@ export class CombatEntity extends Entity{
     }
 
     tryToAttack(deltaTime, isRange){
+        this.playing = false;
+        this.drawContent = this.defaultSprites;
         if(this.lastAttack > (1000 / this.attackSpeed)){
-            if(this.attackPreDelay > (100 / this.attackSpeed)){
+            this.drawContent = this.attackSprites;
+            this.playing = true;
+            if(this.attackPreDelay > (10)){
                 if(!isRange) {
                     objects[this.target].dealDamage(this.attackDamage);
                 }else{
@@ -60,11 +78,15 @@ export class CombatEntity extends Entity{
     }
 
     combatTarget(deltaTime){
+        this.playing = false;
         if(this.target != "None"){
             if(objects[this.target] == undefined) return;
             if(objects[this.target].health <= 0) {
                 this.target = "None";
                 return;
+            }else{
+                this.drawContent = this.defaultSprites;
+                this.playing = false;
             }
             let collided = false;
             objects.forEach(element => {
@@ -73,7 +95,7 @@ export class CombatEntity extends Entity{
                     if(element.entityType == "CombatEntity" && !collided){
                         let destination = mathhelper.GetFacingVector(this, element);
                         this.move(destination.x*deltaTime,destination.y*deltaTime);
-                        this.progressWalkAnimation(deltaTime);
+                        this.playing = true;
                     }
                 }
     
@@ -84,7 +106,7 @@ export class CombatEntity extends Entity{
                 }else{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
-                    this.progressWalkAnimation(deltaTime);
+                    this.playing = true;
                 }
             }else if(!this.isRange){
                 this.tryToAttack(deltaTime, false);
@@ -92,11 +114,22 @@ export class CombatEntity extends Entity{
         }
     }
 
-    progressWalkAnimation(deltaTime){
+    playingAnimation(deltaTime){
+        if(this.playing){
+            this.frameClock += deltaTime;
+            if(this.frameClock > this.frameDelay){
+                this.frameClock = 0;
+                this.currentFrame++;
+                if(this.currentFrame >= this.drawContent.columns) this.currentFrame = 0;
+            }
+        }else{
+            this.currentFrame = 0;
+        }
 
     }
 
     updateObject(deltaTime){
+        this.playingAnimation(deltaTime);
         this.lastAttack++;
         this.EntityInfoDisplay.updateObject(deltaTime);
         //this.hitbox.updateObject(deltaTime);

@@ -21,8 +21,13 @@ export class Enemy extends CombatEntity{
         this.attackDamage = 20;
         this.attackSpeed = 8;
         //sprite
-        this.drawContent = (this.isRange) ? new graphics.Sprite("/img/lucznik.png", 50, 50) :
-                                            new graphics.Sprite("/img/miecznik.png", 50, 50);
+        //this.drawContent = (this.isRange) ? new graphics.Sprite("/img/lucznik.png") :
+        //                                    new graphics.Sprite("/img/miecznik.png");
+        let enemyImage = new graphics.Sprite("/img/character/BODY_skeleton.png");
+        let enemySprite = new graphics.SpriteSheet(enemyImage, 4, 9, 64, 64);
+        this.defaultSprites = enemySprite;
+        this.attackSprites = enemySprite;
+        this.drawContent = enemySprite;
     }
     updateObject(deltaTime){
         if(this.health > 0){
@@ -44,6 +49,20 @@ export class Enemy extends CombatEntity{
                 this.target = closest;
                 
             }else{
+                let xy = mathhelper.GetFacingVectorCC(this, objects[this.target]);
+                if(Math.abs(xy.x) > Math.abs(xy.y)){
+                    if(xy.x > 0){
+                        this.drawContent.setOffset(this.currentFrame, 1);
+                    }else{
+                        this.drawContent.setOffset(this.currentFrame, 3);
+                    }
+                }else{
+                    if(xy.y > 0){
+                        this.drawContent.setOffset(this.currentFrame, 0);
+                    }else{
+                        this.drawContent.setOffset(this.currentFrame, 2);
+                    }
+                }
                 this.combatTarget(deltaTime);
             }
             super.updateObject(deltaTime);
