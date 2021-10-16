@@ -1,10 +1,8 @@
 import { mouseAbsolute } from "/js/mouse.js";
 //sprite
 export class Sprite{
-    constructor(url, width, height){
+    constructor(url){
         this.url = url;
-        this.width = width;
-        this.height = height;
         this.image = new Image();
         this.image.src = this.url;
         this.ready = false;
@@ -16,12 +14,11 @@ export class Sprite{
 
 export class SpriteSheet{
     constructor(sprite, rows, columns, frameWidth, frameHeight){
-        this.sprite = sprite;
+        this.sprite = sprite
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.rows = rows;
         this.columns = columns;
-
         this.currentRow = 0;
         this.currentColumn = 0;
     }
@@ -75,6 +72,7 @@ export function setUpCamera(w, h){
     camera.height = h;
 }
 
+{/*
 export class Animation{
     constructor(frames, delay, loop){
         this.currentFrame = 0;
@@ -131,7 +129,7 @@ export class AnimationController{
         this.animations[this.currentAnimation]
     }
 }
-
+*/}
 /////////////////////////////////////////////////////////////////////////////////////////
 
 export function getScreenWidth() {
@@ -159,7 +157,7 @@ export const ctx = canvas.getContext('2d');
 canvas.width = getScreenWidth();
 canvas.height = getScreenHeight();
 ctx.font = '30px Arial'
-export let zoom = 0.7;
+export let zoom = 0.6;
 
 setUpCamera(canvas.width, canvas.height);
 let lockcam = true;
@@ -175,8 +173,8 @@ function drawImage(x, y, w, h, s){
     ctx.drawImage(s, x, y, w, h);
 }
 
-function drawSpriteFromSheet(x, y, w, h, r, c, s){
-    ctx.drawImage(s, c*w, r*h, w, h, x, y, w, h);
+function drawSpriteFromSheet(x, y, fw, fh, r, c, w, h, s){
+    ctx.drawImage(s, c*fw, r*fh, fw, fh, x, y, w, h);
 }
 
 function drawText(text, style, color, x, y){
@@ -207,6 +205,7 @@ function drawObject(x, y, w, h, content){
                 drawSpriteFromSheet(objViewPos.objViewX, objViewPos.objViewY,
                                     content.frameWidth, content.frameHeight,
                                     content.currentRow, content.currentColumn,
+                                    w, h,
                                     content.sprite.image)
                 break;
         }

@@ -3,6 +3,7 @@ import { camUpdate, Sprite, render, canvas } from './graphics.js';
 import { Entity } from "/js/entities/bases/Entity.js";
 import { Player } from "/js/entities/Player.js";
 import { Enemy } from "/js/entities/Enemy.js";
+import { RepeatedBG } from "/js/entities/RepeatedBG.js";
 import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
 import {menuHalt} from "/js/managers/menumanager.js";
@@ -62,9 +63,7 @@ function update(timestamp){
 function start() {
     requestAnimationFrame(update);
 
-    let grassbg = new Entity();
-    grassbg.w = 800;
-    grassbg.h = 600;
+    let grassbg = new RepeatedBG();
     grassbg.drawContent = new Sprite("/img/trawa.png", 800, 600);
     pushObject(grassbg);
 
