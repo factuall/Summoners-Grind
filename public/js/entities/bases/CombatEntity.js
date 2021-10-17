@@ -43,7 +43,9 @@ export class CombatEntity extends Entity{
         this.frameDelay = 5;
         this.frameClock = 0;
         this.playing = false;
-
+        this.chasingTarget = false;
+        this.chasingTargetOLD = false;
+        this.finishingAtkAnim = false;
     }
 
     bundle(){
@@ -60,25 +62,35 @@ export class CombatEntity extends Entity{
         this.playing = false;
         this.drawContent = this.defaultSprites;
         if(this.lastAttack > (1000 / this.attackSpeed)){
+
             this.drawContent = this.attackSprites;
             this.playing = true;
-            if(this.attackPreDelay > (10)){
+
+            if(this.currentFrame >= (8)){
                 if(!isRange) {
                     objects[this.target].dealDamage(this.attackDamage);
-                }else{
+                }else if(!this.finishingAtkAnim){
                     let newProjectile = new Projectile(this, objects[this.target], this.projectileSpeed, this.attackDamage, objects.length);
                     pushObject(newProjectile);
+                    this.finishingAtkAnim = true;
                 }
-                this.attackPreDelay = 0;
-                this.lastAttack = 0;
+                if(this.currentFrame == 11){
+                    this.finishingAtkAnim = false;
+                    this.lastAttack = 0;
+                }
             }else{
                 this.attackPreDelay += deltaTime;
             }
         }
     }
 
+
+
     combatTarget(deltaTime){
         this.playing = false;
+        if(this.target == "None") {
+            this.chasingTarget = false;
+        }
         if(this.target != "None"){
             if(objects[this.target] == undefined) return;
             if(objects[this.target].health <= 0) {
@@ -96,6 +108,7 @@ export class CombatEntity extends Entity{
                         let destination = mathhelper.GetFacingVector(this, element);
                         this.move(destination.x*deltaTime,destination.y*deltaTime);
                         this.playing = true;
+                        this.chasingTarget = true;
                     }
                 }
     
@@ -107,6 +120,7 @@ export class CombatEntity extends Entity{
                     let destination = mathhelper.GetFacingVector(this, objects[this.target]);
                     this.move(-destination.x*this.moveSpeed*deltaTime,-destination.y*this.moveSpeed*deltaTime);
                     this.playing = true;
+                    this.chasingTarget = false;
                 }
             }else if(!this.isRange){
                 this.tryToAttack(deltaTime, false);
@@ -132,6 +146,10 @@ export class CombatEntity extends Entity{
         this.playingAnimation(deltaTime);
         this.lastAttack++;
         this.EntityInfoDisplay.updateObject(deltaTime);
+        if(this.chasingTargetOLD && !this.chasingTarget){
+            this.currentFrame = 0;
+        }
+        this.chasingTargetOLD = this.chasingTarget;
         //this.hitbox.updateObject(deltaTime);
     }
 

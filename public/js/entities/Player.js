@@ -3,6 +3,7 @@ import * as graphics from "/js/graphics.js";
 import { cursor } from "/js/mouse.js";
 import { controls } from "/js/keybinding.js";
 import * as mathhelper from "/js/mathhelper.js";
+import { render } from '../graphics.js';
 
 const HTMLBEAK = "<br/>"
 const HPBar = document.getElementById('HealthBar');
@@ -49,10 +50,17 @@ export class Player extends CombatEntity{
         //sprite
         let spriteImage = new graphics.Sprite("/img/character/BODY_male.png");
         this.defaultSprites = new graphics.SpriteSheet(spriteImage, 4, 9, 64, 64);
+        this.defaultSprites.name = "walk";
         this.drawContent = this.defaultSprites;
 
         let spriteImageATK = new graphics.Sprite("/img/character/BODY_animation.png");
-        this.attackSprites = new graphics.SpriteSheet(spriteImageATK, 4, 9, 64, 64);
+        this.attackSprites = new graphics.SpriteSheet(spriteImageATK, 4, 12, 64, 64);
+        this.attackSprites.name = "attack";
+
+        let bowAttackImage = new graphics.Sprite("/img/character/WEAPON_bow.png");
+        this.bowAttackSprites = new graphics.SpriteSheet(bowAttackImage, 4, 12, 64, 64);
+
+        this.currentDir = 0;
 
         this.cameraFollow = true;
         document.addEventListener("cursorClick", e => {
@@ -85,14 +93,18 @@ export class Player extends CombatEntity{
         if(Math.abs(xy.x) > Math.abs(xy.y)){
             if(xy.x > 0){
                 this.drawContent.setOffset(this.currentFrame, 1);
+                this.currentDir = 1;
             }else{
                 this.drawContent.setOffset(this.currentFrame, 3);
+                this.currentDir = 3;
             }
         }else{
             if(xy.y > 0){
                 this.drawContent.setOffset(this.currentFrame, 0);
+                this.currentDir = 0;
             }else{
                 this.drawContent.setOffset(this.currentFrame, 2);
+                this.currentDir = 2;
             }
         }
         this.playingAnimation(deltaTime);
@@ -119,7 +131,37 @@ export class Player extends CombatEntity{
             let timeLeft = (playerSkill.cooldown - playerSkill.clock) / 60;
             SkillsGUI[i].innerHTML = playerSkill.label + ((playerSkill.clock >= playerSkill.cooldown) ? "" : HTMLBEAK + timeLeft.toFixed(1) + "s");
         });        
-        return super.renderObject();
+
+        if(this.drawContent.name == "attack") {
+            let renderList = [];
+            renderList.push({
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h,
+                drawContent: this.bowAttackSprites
+            });
+            this.bowAttackSprites.currentColumn = this.currentFrame;
+            this.bowAttackSprites.currentRow = this.currentDir;
+
+            let rest = super.renderObject();
+            rest.push({
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h,
+                drawContent: this.bowAttackSprites
+            });
+
+            return rest;
+            //let weapon = super.renderObject();
+
+            //weapon.drawContent = this.bowAttackSprites;
+            //renderList.push(weapon);
+        }else{
+            return super.renderObject();
+        }
+
     }
 
     tryTarget(clickedList){

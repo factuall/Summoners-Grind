@@ -21,6 +21,7 @@ export class SpriteSheet{
         this.columns = columns;
         this.currentRow = 0;
         this.currentColumn = 0;
+        this.name = "";
     }
     setOffset(x, y){
         this.currentColumn = x;
