@@ -14,14 +14,16 @@ export class RepeatedBG extends Entity {
     }
 
     updateObject(){
-        if(Math.abs(this.x - graphics.camera.x) >= this.w) this.x = graphics.camera.x;
-        if(Math.abs(this.y - graphics.camera.y) >= this.h) this.y = graphics.camera.y;
+        
+        console.log(((this.x - graphics.camera.x) / (this.x - graphics.camera.x)) * 32);
+        while(Math.abs(this.x - graphics.camera.x) > this.w) this.x -= ((this.x - graphics.camera.x) > 0) ? 32 : -32;
+        while(Math.abs(this.y - graphics.camera.y) > this.h) this.y -= ((this.y - graphics.camera.y) > 0) ? 32 : -32;
     }
 
     renderObject(){
         let tilesList = [];
-        for (let iY = -2; iY < (graphics.getScreenHeight() / this.h) + 2; iY++) {
-            for (let iX = -2; iX < (graphics.getScreenWidth() / this.w) + 2; iX++) {
+        for (let iY = -4; iY < (graphics.getScreenHeight() / this.h) + 4; iY++) {
+            for (let iX = -4; iX < (graphics.getScreenWidth() / this.w) + 4; iX++) {
                 tilesList.push(this.getOffsetRenderOutput(iX, iY));
             }
         }
