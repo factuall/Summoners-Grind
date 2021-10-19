@@ -7,11 +7,21 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="/stylesheets/indexstyle.css">
     </head>
     <body>
-        <div id="title">Summoners Grind</div>
-        <div id="sub-title">It's like League Of Legend's farming, but in JS. By Factuall</div>
-        <a href="play.html"><button type="button">PLAY</button></a>
+        <div id="intro">
+            <div id="title">Summoners Grind</div>
+            <div id="sub-title">It's like League Of Legend's farming, but in JS. By Factuall</div>
+            <button type="button" id="play">PLAY</button>
+            <script>
+                document.getElementById("play").addEventListener("click", ()=>{
+                    $('#intro').fadeOut(200, ()=>{
+                        window.location.replace("/play.html");
+                    });
+                });
+            </script>
+        </div>
     </body>
 </html>

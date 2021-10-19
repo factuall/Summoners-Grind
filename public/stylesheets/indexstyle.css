@@ -1,4 +1,12 @@
 body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}   
+#intro{
+    width: 100%;
+    height: 100vh;
     display: flex;
     background-color: darkslategray;
     font-family: 'Raleway', sans-serif;
@@ -8,7 +16,6 @@ body{
     flex-direction: column;
 }
 #title{
-    margin-top: 20vh;
     margin-bottom: 1vh;
     font-size: 8vw;
 }
