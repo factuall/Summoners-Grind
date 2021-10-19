@@ -7,6 +7,7 @@ import { RepeatedBG } from "/js/entities/RepeatedBG.js";
 import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
 import {menuHalt} from "/js/managers/menumanager.js";
+import { MouseCursor } from '/js/entities/MouseCursor.js';
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
@@ -70,12 +71,15 @@ function start() {
     let player = new Player();
     pushObject(player.bundle());
 
+    let mouseCursor = new MouseCursor();
+    pushObject(mouseCursor);
+
     let cursor = new Entity();
     cursor.w = 10;
     cursor.h = 10;
     cursor.c = "rgba(225,225,225,0.4)";
     pushObject(cursor);
-    mouse.setCursor(cursor);
+    mouse.setCursor(cursor, mouseCursor);
     mouse.canvasReady(canvas);
     mouse.addEListener();
 

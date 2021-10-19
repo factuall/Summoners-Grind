@@ -7,6 +7,7 @@ import {menuHalt} from "/js/managers/menumanager.js";
 export let canvas;
 export let canvasPosition;
 export let cursor;
+export let mouseCursor;
 
 export const mouse = {
     x: 0,
@@ -20,8 +21,9 @@ export const mouseAbsolute = {
 }
 
 // sync cursor object with one defined in main module
-export function setCursor(crs){
+export function setCursor(crs, mCrs){
     cursor = crs;
+    mouseCursor = mCrs;
 }
 
 export function canvasReady(cvs){
@@ -55,7 +57,6 @@ export function addEListener(){
                     else clickedObjects.push(e);
                 }
             });
-            console.log(clickedObjects);
             let cursorClick = new CustomEvent('cursorClick', {detail: clickedObjects});
             document.dispatchEvent(cursorClick);
             cursor.setCentralPosition(mouse.x, mouse.y);
@@ -94,6 +95,9 @@ function updateMousePosition(event){
 
     mouse.x = event.pageX + camera.x;
     mouse.y = event.pageY + camera.y;
+
+    mouseCursor.mouseX = mouseAbsolute.x;
+    mouseCursor.mouseY = mouseAbsolute.y;
 
 }
 document.onmousemove = updateMousePosition;

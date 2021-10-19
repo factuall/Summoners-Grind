@@ -14,8 +14,6 @@ export class RepeatedBG extends Entity {
     }
 
     updateObject(){
-        
-        console.log(((this.x - graphics.camera.x) / (this.x - graphics.camera.x)) * 32);
         while(Math.abs(this.x - graphics.camera.x) > this.w) this.x -= ((this.x - graphics.camera.x) > 0) ? 32 : -32;
         while(Math.abs(this.y - graphics.camera.y) > this.h) this.y -= ((this.y - graphics.camera.y) > 0) ? 32 : -32;
     }
