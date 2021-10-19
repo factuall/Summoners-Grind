@@ -3,6 +3,7 @@ import { objects } from "/js/gamemodule.js";
 import * as mathhelper from "/js/mathhelper.js";
 import { camera, getScreenWidth, getScreenHeight, zoom } from "/js/graphics.js";
 import {menuHalt} from "/js/managers/menumanager.js";
+import * as graphics from "/js/graphics.js";
 
 export let canvas;
 export let canvasPosition;

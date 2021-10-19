@@ -1,5 +1,6 @@
 import './keybinding.js';
 import { camUpdate, Sprite, render, canvas } from './graphics.js';
+import * as graphics from './graphics.js';
 import { Entity } from "/js/entities/bases/Entity.js";
 import { Player } from "/js/entities/Player.js";
 import { Enemy } from "/js/entities/Enemy.js";
@@ -8,6 +9,7 @@ import { Trash } from "/js/entities/Trash.js";
 import * as mouse from "/js/mouse.js";
 import {menuHalt} from "/js/managers/menumanager.js";
 import { MouseCursor } from '/js/entities/MouseCursor.js';
+import { mouseCursor } from './mouse.js';
 
 //update and render setup
 const perfectFrameTime = 1000 / 60;
@@ -33,7 +35,7 @@ export function pushObject(obj){
 }
 
 let renderInterval = window.setInterval(function(){
-    render(objects);
+    graphics.render(objects);
 }, 3);
 
 
@@ -46,6 +48,7 @@ function update(timestamp){
     if(menuHalt) return;
     requestAnimationFrame(update);
     camUpdate(deltaTime);
+    
     deltaTime = (timestamp - lastTimestamp) / perfectFrameTime;
     lastTimestamp = timestamp;
     objects.forEach(element => {

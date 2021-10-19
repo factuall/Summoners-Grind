@@ -174,7 +174,7 @@ function drawImage(x, y, w, h, s){
     ctx.drawImage(s, x, y, w, h);
 }
 
-function drawSpriteFromSheet(x, y, fw, fh, r, c, w, h, s){
+export function drawSpriteFromSheet(x, y, fw, fh, r, c, w, h, s){
     ctx.drawImage(s, c*fw, r*fh, fw, fh, x, y, w, h);
 }
 
