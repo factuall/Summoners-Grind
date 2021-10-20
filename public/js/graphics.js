@@ -1,4 +1,5 @@
-import { mouseAbsolute } from "/js/mouse.js";
+import { mouseAbsolute, mouseCursor } from "/js/mouse.js";
+import * as msc from "/js/entities/MouseCursor.js";
 //sprite
 export class Sprite{
     constructor(url){
@@ -217,10 +218,39 @@ let prevZoom = zoom;
 let camSpeed = 10;
 export function camUpdate(deltaTime){
     if(!lockcam){
-        if(mouseAbsolute.x < 75) camera.x -= camSpeed * deltaTime;
-        if(mouseAbsolute.x > getScreenWidth() - 75) camera.x += camSpeed * deltaTime; 
-        if(mouseAbsolute.y < 75) camera.y -= camSpeed * deltaTime;
-        if(mouseAbsolute.y > getScreenHeight() - 75) camera.y += camSpeed * deltaTime; 
+        let horizontal = 0, vertical = 0;
+        if(mouseAbsolute.x < 75) { 
+            camera.x -= camSpeed * deltaTime;
+            mouseCursor.requestCursor(msc.CURSOR_ARROW);
+            horizontal = -1;
+        }else if(mouseAbsolute.x > getScreenWidth() - 75) { 
+            camera.x += camSpeed * deltaTime; 
+            mouseCursor.requestCursor(msc.CURSOR_ARROW);
+            horizontal = 1;
+        }
+        
+        if(mouseAbsolute.y < 75) { 
+            camera.y -= camSpeed * deltaTime;
+            mouseCursor.requestCursor(msc.CURSOR_ARROW);
+            vertical = -1;
+        }if(mouseAbsolute.y > getScreenHeight() - 75) { 
+            camera.y += camSpeed * deltaTime; 
+            mouseCursor.requestCursor(msc.CURSOR_ARROW);
+            vertical = 1;
+        }
+
+        if(horizontal == 0){
+            if(vertical == -1) mouseCursor.currentFrame = 5;
+            if(vertical == 1) mouseCursor.currentFrame = 1;
+        }else if(horizontal == -1){
+            mouseCursor.currentFrame = 3;
+            if(vertical == -1) mouseCursor.currentFrame = 4;
+            if(vertical == 1) mouseCursor.currentFrame = 2;
+        }else{ if(horizontal)
+            mouseCursor.currentFrame = 7;
+            if(vertical == -1) mouseCursor.currentFrame = 6;
+            if(vertical == 1) mouseCursor.currentFrame = 0;
+        }
     }
 }
 

@@ -3,13 +3,17 @@ import { resumeUpdate, lastTimestamp } from "/js/gamemodule.js";
 export let menuHalt = false;
 let gameMenu = document.getElementById("GameMenu");
 gameMenu.style.display = "none";
+$('#PlayerGui').css("cursor", "default");
 
 export function openMenu(){
+    $('#GameScreen').css("cursor", "default");
     menuHalt = true;
     $('#GameMenu').animate({height: "toggle"}, 200, ()=>{});
 }
 
 export function closeMenu(){
+    $('#GameScreen').css("cursor", "none");
+    $('#PlayerGui').css("cursor", "default");
     menuHalt = false;
     $('#GameMenu').animate({height: "toggle"}, 200, ()=>{});
     requestAnimationFrame(resumeUpdate);
