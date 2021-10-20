@@ -46,6 +46,9 @@ export class CombatEntity extends Entity{
         this.chasingTarget = false;
         this.chasingTargetOLD = false;
         this.finishingAtkAnim = false;
+
+        this.deployAttackFrame = 8;
+        this.attackAnimLength = 11;
     }
 
     bundle(){
@@ -66,7 +69,7 @@ export class CombatEntity extends Entity{
             this.drawContent = this.attackSprites;
             this.playing = true;
 
-            if(this.currentFrame >= (8)){
+            if(this.currentFrame >= (this.deployAttackFrame)){
                 if(!isRange) {
                     objects[this.target].dealDamage(this.attackDamage);
                 }else if(!this.finishingAtkAnim){
@@ -74,10 +77,11 @@ export class CombatEntity extends Entity{
                     pushObject(newProjectile);
                     this.finishingAtkAnim = true;
                 }
-                if(this.currentFrame == 11){
+                if(this.currentFrame == this.attackAnimLength){
                     this.finishingAtkAnim = false;
                     this.lastAttack = 0;
                 }
+                console.log(this.currentFrame);
             }else{
                 this.attackPreDelay += deltaTime;
             }

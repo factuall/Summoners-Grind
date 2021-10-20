@@ -25,9 +25,13 @@ export class Enemy extends CombatEntity{
         //                                    new graphics.Sprite("/img/miecznik.png");
         let enemyImage = new graphics.Sprite("/img/character/BODY_skeleton.png");
         let enemySprite = new graphics.SpriteSheet(enemyImage, 4, 9, 64, 64);
+        let enemyAttackImage = new graphics.Sprite("/img/character/BODY_skeleton_attack.png");
+        let enemyAttackSprite = new graphics.SpriteSheet(enemyAttackImage, 4, 6, 64, 64);
         this.defaultSprites = enemySprite;
-        this.attackSprites = enemySprite;
+        this.attackSprites = enemyAttackSprite;
         this.drawContent = enemySprite;
+        this.deployAttackFrame = 3;
+        this.attackAnimLength = 5;
     }
     updateObject(deltaTime){
         if(this.health > 0){
