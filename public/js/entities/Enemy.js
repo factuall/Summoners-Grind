@@ -21,8 +21,7 @@ export class Enemy extends CombatEntity{
         this.attackDamage = 20;
         this.attackSpeed = 8;
         //sprite
-        //this.drawContent = (this.isRange) ? new graphics.Sprite("/img/lucznik.png") :
-        //                                    new graphics.Sprite("/img/miecznik.png");
+
         let enemyImage = new graphics.Sprite("/img/character/BODY_skeleton.png");
         let enemySprite = new graphics.SpriteSheet(enemyImage, 4, 9, 64, 64);
         let enemyAttackImage = new graphics.Sprite("/img/character/BODY_skeleton_attack.png");

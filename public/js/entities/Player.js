@@ -154,10 +154,6 @@ export class Player extends CombatEntity{
             });
 
             return rest;
-            //let weapon = super.renderObject();
-
-            //weapon.drawContent = this.bowAttackSprites;
-            //renderList.push(weapon);
         }else{
             return super.renderObject();
         }
